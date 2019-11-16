@@ -1,0 +1,45 @@
+@import 'app/styles/index.scss';
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px #ddd, 1px 1px 1px 0 #f5f5f5 inset, 1px 1px 2px -1px #ddd;
+    cursor: pointer;
+    min-width: 36px;
+    min-height: 36px;
+
+    @include screen-480 {
+        min-width: 40px;
+        min-height: 40px;
+    }
+    @include screen-min-768 {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    img {
+        width: 24px;
+        height: 24px;
+    }
+
+    &:hover {
+        color: #424242;
+        background-color: #f5f5f5;
+    }
+
+    &--theme-transparent {
+        border: none;
+        background-color: transparent;
+        box-shadow: none;
+    }
+
+    &--disabled {
+        opacity: 0.5;
+        box-shadow: none;
+        pointer-events: none;
+    }
+}

@@ -1,0 +1,71 @@
+$screenSize-320: 320;
+$screenSize-480: 480;
+$screenSize-768: 720;
+$screenSize-1080: 1080;
+$screenSize-1440: 1440;
+
+@mixin screen-480 {
+    @media only screen and (min-width: $screenSize-480 + px) and (max-width: $screenSize-768 - 1 + px) {
+        @content;
+    }
+}
+
+@mixin screen-768 {
+    @media only screen and (min-width: $screenSize-768 + px) and (max-width: $screenSize-1080 - 1 + px) {
+        @content;
+    }
+}
+
+@mixin screen-1080 {
+    @media only screen and (min-width: $screenSize-1080 + px) and (max-width: $screenSize-1440 - 1 + px) {
+        @content;
+    }
+}
+
+@mixin screen-min-480 {
+    @media only screen and (min-width: $screenSize-480 + px) {
+        @content;
+    }
+}
+
+@mixin screen-min-768 {
+    @media only screen and (min-width: $screenSize-768 + px) {
+        @content;
+    }
+}
+
+@mixin screen-min-1080 {
+    @media only screen and (min-width: $screenSize-1080 + px) {
+        @content;
+    }
+}
+
+@mixin screen-min-1440 {
+    @media only screen and (min-width: $screenSize-1440 + px) {
+        @content;
+    }
+}
+
+@mixin screen-max-320 {
+    @media (max-width: $screenSize-480 - 1 + px) {
+        @content;
+    }
+}
+
+@mixin screen-max-480 {
+    @media (max-width: $screenSize-768 - 1 + px) {
+        @content;
+    }
+}
+
+@mixin screen-max-768 {
+    @media (max-width: $screenSize-1080 - 1 + px) {
+        @content;
+    }
+}
+
+@mixin screen-max-1080 {
+    @media (max-width: $screenSize-1440 - 1 + px) {
+        @content;
+    }
+}
