@@ -1,6 +1,9 @@
 Flask
+Flask-Migrate
 Flask-RESTful
+Flask-SQLAlchemy
 Jinja2
 python-dotenv
+SQLAlchemy
 Werkzeug
 uwsgi
