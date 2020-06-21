@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from pandlol import db
 
 
@@ -18,6 +19,10 @@ class UserModel(db.Model):
 
     def __repr__(self):
         return f'User {self.email}'
+
+    @classmethod
+    def find_by_email(cls, email):
+        return cls.query.filter_by(email=email).first()
 
     def json(self):
         return {

@@ -11,4 +11,13 @@ user_parser.add_argument("avatar", type=str)
 class UserRegister(Resource):
     def post(self):
         data = user_parser.parse_args()
-        print(UserModel(**data))
+        user = UserModel(**data)
+
+        if UserModel.find_by_email(user.email):
+            return {"status": "ERROR",
+                    "errors":
+                        {"email":
+                             {"code": 101,
+                              "message": "email exists"}
+                         }
+                    }

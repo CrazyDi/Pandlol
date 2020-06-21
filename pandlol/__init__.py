@@ -5,7 +5,6 @@ from flask_migrate import Migrate
 from dotenv import load_dotenv
 
 
-
 app = Flask(__name__, template_folder='../www/public', static_folder='../www/public/assets')
 load_dotenv("pandlol/.env", verbose=True)
 app.config.from_object("pandlol.default_config")
