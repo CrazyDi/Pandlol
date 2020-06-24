@@ -17,9 +17,10 @@ class UserRegister(Resource):
         user = UserModel(data["email"], data["password"], data["avatar"])
 
         check_user = CheckUser(user, data["confirm_password"])
+        check = Check()
 
-        if not Check.validate(email=[check_user.validate_email_exists, check_user.validate_email_format],
+        if not check.validate(email=[check_user.validate_email_format, check_user.validate_email_exists],
                               password=[check_user.validate_password_format]):
-            return {"status": "ERROR", "errors": Check.errors}
+            return {"status": "ERROR", "errors": check.errors}
 
         return {"status": "OK"}
