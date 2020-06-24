@@ -2,18 +2,19 @@ from typing import Dict
 
 
 class Check:
-    errors: Dict
+    def __init__(self):
+        self.errors = {}
 
-    @classmethod
-    def validate(cls, **kwargs) -> bool:
-        cls.errors = {}
+    def validate(self, **kwargs) -> bool:
+        self.errors = {}
         for key, func_list in kwargs.items():
             for func in func_list:
-                result = func()
-                if result and key not in cls.errors:
-                    cls.errors[key] = result
+                if key not in self.errors:
+                    result = func()
+                    if result:
+                        self.errors[key] = result
 
-        if cls.errors:
+        if self.errors:
             return False
 
         return True
