@@ -1,5 +1,6 @@
 import re
 from typing import Dict
+from werkzeug.security import check_password_hash
 
 from pandlol.models.user import UserModel
 
@@ -28,11 +29,11 @@ class CheckUser:
         return {}
 
     def validate_password_format(self) -> Dict:
-        if len(self.user.password) == 0:
+        if len(self.user.password_hash) == 0:
             return {"code": 103,
                     "message": "password is empty"}
 
-        if self.user.password != self.confirm_password:
+        if not check_password_hash(self.user.password_hash, self.confirm_password):
             return {"code": 104,
                     "message": "password and confirm password are not equal"}
 
