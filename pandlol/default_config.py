@@ -1,4 +1,5 @@
 import os
+import logging
 
 
 class Config:
@@ -9,6 +10,7 @@ class Config:
 
 
 class DevelopmentConfig(Config):
+    logging.basicConfig(format = u'%(levelname)-8s - %(name)s [%(asctime)s] %(message)s', level=logging.DEBUG)
     ENV = "development"
     DEVELOPMENT = True
     DEBUG = True
@@ -20,5 +22,7 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
+    logging.basicConfig(format=u'%(levelname)-8s - %(name)s [%(asctime)s] %(message)s', level=logging.ERROR,
+                        filename=u'pandlol.log')
     PRODUCTION = True
     DEBUG = False

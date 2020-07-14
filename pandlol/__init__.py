@@ -11,7 +11,6 @@ app.config.from_object("pandlol.default_config.DevelopmentConfig")
 
 
 db = SQLAlchemy(app)
-Migrate(app, db)
 
 
 api = Api(app)

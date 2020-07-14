@@ -23,4 +23,7 @@ class UserRegister(Resource):
                               password=[check_user.validate_password_format]):
             return {"status": "ERROR", "errors": check.errors}
 
+        if not user.save_to_db():
+            return {"status": "INTERNAL ERROR"}, 503
+
         return {"status": "OK"}

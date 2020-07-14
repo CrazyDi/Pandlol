@@ -23,9 +23,9 @@ class CheckUser:
         return {}
 
     def validate_email_exists(self) -> Dict:
-        # if UserModel.find_by_email(self.user.email):
-        #     return {"code": 102,
-        #             "message": "email exists"}
+        if UserModel.find_by_email(self.user.email):
+            return {"code": 102,
+                    "message": "email exists"}
         return {}
 
     def validate_password_format(self) -> Dict:
