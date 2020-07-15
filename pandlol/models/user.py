@@ -1,4 +1,7 @@
+import psycopg2
+
 from datetime import datetime
+from sqlalchemy.exc import IntegrityError
 from logging import getLogger
 from werkzeug.security import generate_password_hash
 
@@ -12,7 +15,7 @@ class UserModel(db.Model):
     __tablename__ = 'user_list'
 
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(80))
+    email = db.Column(db.String(80), unique=True)
     password_hash = db.Column(db.String(180))
     avatar = db.Column(db.String(80))
     create_date = db.Column(db.DateTime, default=datetime.utcnow())
@@ -26,8 +29,12 @@ class UserModel(db.Model):
         return f'User {self.email}'
 
     @classmethod
-    def find_by_email(cls, email: str):
-        return cls.query.filter_by(email=email).first()
+    def find_by_email(cls, email: str) -> bool:
+        try:
+            return cls.query.filter_by(email=email).first()
+        except IntegrityError as e:
+            logger.exception("Exception {} occurred in proc find_by_email".format(e.orig.pgcode))
+            return False
 
     def json(self):
         return {
@@ -36,20 +43,23 @@ class UserModel(db.Model):
             "avatar": self.avatar
         }
 
-    def save_to_db(self) -> bool:
+    def save_to_db(self) -> int:
         try:
             db.session.add(self)
             db.session.commit()
-            return True
-        except:
-            logger.exception("Exception occurred in proc save_to_db")
-            return False
+            return 0
+        except IntegrityError as e:
+            logger.exception("Exception {} occurred in proc save_to_db".format(e.orig.pgcode))
+            if e.orig.pgcode == '23505':
+                return 102
+            else:
+                return 503
 
-    def delete_from_db(self):
+    def delete_from_db(self) -> int:
         try:
             db.session.delete(self)
             db.session.commit()
-            return True
-        except:
-            logger.exception("Exception occurred in proc delete_from_db")
-            return False
+            return 0
+        except IntegrityError as e:
+            logger.exception("Exception {} occurred in proc delete_from_db".format(e.orig.pgcode))
+            return 503
