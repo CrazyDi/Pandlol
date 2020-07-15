@@ -29,12 +29,12 @@ class UserModel(db.Model):
         return f'User {self.email}'
 
     @classmethod
-    def find_by_email(cls, email: str) -> bool:
+    def find_by_email(cls, email: str):
         try:
             return cls.query.filter_by(email=email).first()
         except IntegrityError as e:
             logger.exception("Exception {} occurred in proc find_by_email".format(e.orig.pgcode))
-            return False
+            return None
 
     def json(self):
         return {

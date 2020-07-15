@@ -24,6 +24,7 @@ class UserRegister(Resource):
             return {"status": "ERROR", "errors": check.errors}
 
         res = user.save_to_db()
+
         if res == 102:
             return {"status": "ERROR",
                     "errors":
@@ -35,5 +36,19 @@ class UserRegister(Resource):
                     }
         elif res == 503:
             return {"status": "INTERNAL ERROR"}, 503
+
+        return {"status": "OK"}
+
+
+class UserLogin(Resource):
+    def post(self):
+        data = user_parser.parse_args()
+        user = UserModel.find_by_email(data["email"])
+
+        check_user = CheckUser(user, data["password"])
+        check = Check()
+
+        if not check.validate(password=[check_user.validate_password]):
+            return {"status": "ERROR", "errors": check.errors}
 
         return {"status": "OK"}

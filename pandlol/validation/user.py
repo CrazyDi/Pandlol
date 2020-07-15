@@ -38,3 +38,14 @@ class CheckUser:
                     "message": "password and confirm password are not equal"}
 
         return {}
+
+    def validate_password(self) -> Dict:
+        if len(self.user.password_hash) == 0:
+            return {"code": 103,
+                    "message": "password is empty"}
+
+        if not check_password_hash(self.user.password_hash, self.confirm_password):
+            return {"code": 105,
+                    "message": "wrong password"}
+
+        return {}

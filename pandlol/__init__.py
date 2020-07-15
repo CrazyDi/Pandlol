@@ -16,10 +16,11 @@ db = SQLAlchemy(app)
 api = Api(app)
 
 
-from pandlol.resources.user import UserRegister
+from pandlol.resources.user import UserRegister, UserLogin
 
 
 api.add_resource(UserRegister, '/api/signup')
+api.add_resource(UserLogin, '/api/login')
 
 
 @app.route('/')
