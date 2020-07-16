@@ -6,9 +6,10 @@ from pandlol.models.user import UserModel
 
 
 class CheckUser:
-    def __init__(self, user: UserModel, confirm_password: str):
+    def __init__(self, user: UserModel, confirm_password: str, password_len: int):
         self.user = user
         self.confirm_password = confirm_password
+        self.password_len = password_len
 
     def validate_email_format(self) -> Dict:
         if len(self.user.email) == 0:
@@ -32,6 +33,10 @@ class CheckUser:
         if len(self.user.password_hash) == 0:
             return {"code": 103,
                     "message": "password is empty"}
+
+        if self.password_len < 6:
+            return {"code": 106,
+                    "message": "password length couldn't be less than 6"}
 
         if not check_password_hash(self.user.password_hash, self.confirm_password):
             return {"code": 104,

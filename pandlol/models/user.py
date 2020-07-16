@@ -1,11 +1,10 @@
-import psycopg2
-
 from datetime import datetime
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, DataError, DatabaseError
 from logging import getLogger
 from werkzeug.security import generate_password_hash
 
 from pandlol import db
+from utils import log_database_error
 
 
 logger = getLogger(__name__)
@@ -32,8 +31,8 @@ class UserModel(db.Model):
     def find_by_email(cls, email: str):
         try:
             return cls.query.filter_by(email=email).first()
-        except IntegrityError as e:
-            logger.exception("Exception {} occurred in proc find_by_email".format(e.orig.pgcode))
+        except:
+            logger.exception("Exception occurred in func find_by_email")
             return None
 
     def json(self):
@@ -43,23 +42,44 @@ class UserModel(db.Model):
             "avatar": self.avatar
         }
 
-    def save_to_db(self) -> int:
-        try:
-            db.session.add(self)
-            db.session.commit()
-            return 0
-        except IntegrityError as e:
-            logger.exception("Exception {} occurred in proc save_to_db".format(e.orig.pgcode))
-            if e.orig.pgcode == '23505':
-                return 102
-            else:
-                return 503
+    @log_database_error(logger)
+    def _save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+        return None
 
-    def delete_from_db(self) -> int:
-        try:
-            db.session.delete(self)
-            db.session.commit()
-            return 0
-        except IntegrityError as e:
-            logger.exception("Exception {} occurred in proc delete_from_db".format(e.orig.pgcode))
-            return 503
+    @log_database_error(logger)
+    def _delete_from_db(self):
+        db.session.delete(self)
+        db.session.commit()
+        return None
+
+    def insert(self):
+        res = self._save_to_db()
+        if res is None:
+            return {"status": "OK"}
+        elif res == '23505':
+            return {"status": "ERROR",
+                    "errors":
+                        {"email":
+                            {"code": 102,
+                             "message": "email exists"
+                            }
+                        }
+                    }
+        else:
+            return {"status": "INTERNAL ERROR"}
+
+    def update(self):
+        res = self._save_to_db()
+        if res is None:
+            return {"status": "OK"}
+        else:
+            return {"status": "INTERNAL ERROR"}
+
+    def delete(self):
+        res = self._delete_from_db()
+        if res is None:
+            return {"status": "OK"}
+        else:
+            return {"status": "INTERNAL ERROR"}

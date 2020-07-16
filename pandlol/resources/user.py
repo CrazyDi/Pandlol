@@ -1,3 +1,4 @@
+from flask import jsonify
 from flask_restful import Resource, reqparse
 
 from pandlol.models.user import UserModel
@@ -16,28 +17,19 @@ class UserRegister(Resource):
         data = user_parser.parse_args()
         user = UserModel(data["email"], data["password"], data["avatar"])
 
-        check_user = CheckUser(user, data["confirm_password"])
+        check_user = CheckUser(user, data["confirm_password"], len(data["password"]))
         check = Check()
 
         if not check.validate(email=[check_user.validate_email_format, check_user.validate_email_exists],
                               password=[check_user.validate_password_format]):
             return {"status": "ERROR", "errors": check.errors}
 
-        res = user.save_to_db()
+        res = user.insert()
+        res_code = 200
+        if res['status'] == "INTERNAL ERROR":
+            res_code = 503
 
-        if res == 102:
-            return {"status": "ERROR",
-                    "errors":
-                        {"email":
-                            {"code": 102,
-                             "message": "email exists"
-                            }
-                        }
-                    }
-        elif res == 503:
-            return {"status": "INTERNAL ERROR"}, 503
-
-        return {"status": "OK"}
+        return res, res_code
 
 
 class UserLogin(Resource):
