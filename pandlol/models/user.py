@@ -1,5 +1,4 @@
 from datetime import datetime
-from sqlalchemy.exc import IntegrityError, DataError, DatabaseError
 from logging import getLogger
 from werkzeug.security import generate_password_hash
 
