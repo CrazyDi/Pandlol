@@ -2,6 +2,7 @@ import os
 import logging
 
 
+# Базовые настройки приложения
 class Config:
     DEBUG = False
     SECRET_KEY = os.urandom(24)
@@ -12,6 +13,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
+# Настройки приложения для разработки
 class DevelopmentConfig(Config):
     logging.basicConfig(format = u'%(levelname)-8s - %(name)s [%(asctime)s] %(message)s', level=logging.DEBUG)
     ENV = "development"
@@ -19,11 +21,13 @@ class DevelopmentConfig(Config):
     DEBUG = True
 
 
+# Настройки для тестирования
 class TestingConfig(Config):
     TESTING = True
     DEBUG = True
 
 
+# Настройки для продакшна
 class ProductionConfig(Config):
     logging.basicConfig(format=u'%(levelname)-8s - %(name)s [%(asctime)s] %(message)s', level=logging.ERROR,
                         filename=u'pandlol.log')

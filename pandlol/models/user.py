@@ -6,17 +6,20 @@ from pandlol import db
 from utils import log_database_error
 
 
-logger = getLogger(__name__)
+logger = getLogger(__name__)  # объект логирования
 
 
 class UserModel(db.Model):
+    """
+    Модель пользователя
+    """
     __tablename__ = 'user_list'
 
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(80), unique=True)
-    password_hash = db.Column(db.String(180))
-    avatar = db.Column(db.String(80))
-    create_date = db.Column(db.DateTime, default=datetime.utcnow())
+    id = db.Column(db.Integer, primary_key=True)  # Идентификатор пользователя
+    email = db.Column(db.String(80), unique=True)  # Имя пользователя
+    password_hash = db.Column(db.String(180))  # Захешированный пароль
+    avatar = db.Column(db.String(80))  # Путь к аватару
+    create_date = db.Column(db.DateTime, default=datetime.utcnow())  # Время создания пользователя
 
     def __init__(self, email: str, password: str, avatar: str):
         self.email = email
@@ -28,6 +31,9 @@ class UserModel(db.Model):
 
     @classmethod
     def find_by_email(cls, email: str):
+        """
+        Поиск пользователя в БД по email
+        """
         try:
             return cls.query.filter_by(email=email).first()
         except:
@@ -35,6 +41,9 @@ class UserModel(db.Model):
             return None
 
     def json(self):
+        """
+        Вывод информации о пользователе в JSON-формате
+        """
         return {
             "id": self.id,
             "email": self.email,
@@ -43,17 +52,26 @@ class UserModel(db.Model):
 
     @log_database_error(logger)
     def _save_to_db(self):
+        """
+        Сохранение пользователя в БД
+        """
         db.session.add(self)
         db.session.commit()
         return None
 
     @log_database_error(logger)
     def _delete_from_db(self):
+        """
+        Удаление пользователя из БД
+        """
         db.session.delete(self)
         db.session.commit()
         return None
 
     def insert(self):
+        """
+        Добавление нового пользователя в систему
+        """
         res = self._save_to_db()
         if res is None:
             return {"status": "OK"}
@@ -70,6 +88,9 @@ class UserModel(db.Model):
             return {"status": "INTERNAL ERROR"}
 
     def update(self):
+        """
+        Обновление данных о пользователе в БД 
+        """
         res = self._save_to_db()
         if res is None:
             return {"status": "OK"}
@@ -77,6 +98,9 @@ class UserModel(db.Model):
             return {"status": "INTERNAL ERROR"}
 
     def delete(self):
+        """
+        Удаление сведений о пользователе из БД
+        """
         res = self._delete_from_db()
         if res is None:
             return {"status": "OK"}

@@ -6,12 +6,18 @@ from pandlol.models.user import UserModel
 
 
 class CheckUser:
+    """
+    Проверка данных пользоавтеля
+    """
     def __init__(self, user: UserModel, confirm_password: str, password_len: int):
-        self.user = user
-        self.confirm_password = confirm_password
-        self.password_len = password_len
+        self.user = user  # объект класса пользователя
+        self.confirm_password = confirm_password  # пароль-подтверждение
+        self.password_len = password_len  # длина введенного пароля
 
     def validate_email_format(self) -> Dict:
+        """
+        Проверка формата введенного email
+        """
         if len(self.user.email) == 0:
             return {"code": 100,
                     "message": "email is empty"}
@@ -24,12 +30,18 @@ class CheckUser:
         return {}
 
     def validate_email_exists(self) -> Dict:
+        """
+        Проверка существования такого пользователя в БД
+        """
         if UserModel.find_by_email(self.user.email):
             return {"code": 102,
                     "message": "email exists"}
         return {}
 
     def validate_password_format(self) -> Dict:
+        """
+        Проверка формата введенного пароля
+        """
         if len(self.user.password_hash) == 0:
             return {"code": 103,
                     "message": "password is empty"}
@@ -45,6 +57,9 @@ class CheckUser:
         return {}
 
     def validate_password(self) -> Dict:
+        """
+        Проверка пароля пользователя
+        """
         if len(self.user.password_hash) == 0:
             return {"code": 103,
                     "message": "password is empty"}

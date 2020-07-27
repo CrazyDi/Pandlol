@@ -8,6 +8,7 @@ from pandlol.models.user import UserModel
 from pandlol.validation.check import Check
 from pandlol.validation.user import CheckUser
 
+# Парсер данных пользователя
 user_parser = reqparse.RequestParser()
 user_parser.add_argument("email", type=str)
 user_parser.add_argument("password", type=str)
@@ -16,6 +17,9 @@ user_parser.add_argument("avatar", type=str)
 
 
 class UserRegister(Resource):
+    """
+    Регистрация пользователя
+    """
     def post(self):
         data = user_parser.parse_args()
         user = UserModel(data["email"], data["password"], data["avatar"])
@@ -36,6 +40,9 @@ class UserRegister(Resource):
 
 
 class UserLogin(Resource):
+    """
+    Вход пользователя
+    """
     def post(self):
         data = user_parser.parse_args()
         user = UserModel.find_by_email(data["email"])
@@ -55,6 +62,9 @@ class UserLogin(Resource):
 
 
 class TokenRefresh(Resource):
+    """
+    Обновление access token для пользоателя. Требует refresh token
+    """
     @jwt_refresh_token_required
     def post(self):
         current_user = get_jwt_identity()
@@ -70,6 +80,10 @@ class TokenRefresh(Resource):
 
 
 class UserProfile(Resource):
+    """
+    Просмотр данных о пользователе. Пока что возвращает только имя пользователя.
+    Требует access token
+    """
     @jwt_required
     def get(self):
         current_user = get_jwt_identity()
@@ -83,6 +97,9 @@ class UserProfile(Resource):
 
 
 class UserLogout(Resource):
+    """
+    Выход пользователя. Требует access token
+    """
     @jwt_required
     def post(self):
         jti = get_raw_jwt()['jti']
