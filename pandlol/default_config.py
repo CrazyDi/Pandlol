@@ -15,7 +15,7 @@ class Config:
 
 # Настройки приложения для разработки
 class DevelopmentConfig(Config):
-    logging.basicConfig(format = u'%(levelname)-8s - %(name)s [%(asctime)s] %(message)s', level=logging.DEBUG)
+    logging.basicConfig(format=u'%(levelname)-8s - %(name)s [%(asctime)s] %(message)s', level=logging.DEBUG)
     ENV = "development"
     DEVELOPMENT = True
     DEBUG = True
@@ -29,7 +29,6 @@ class TestingConfig(Config):
 
 # Настройки для продакшна
 class ProductionConfig(Config):
-    logging.basicConfig(format=u'%(levelname)-8s - %(name)s [%(asctime)s] %(message)s', level=logging.ERROR,
-                        filename=u'pandlol.log')
+    logging.basicConfig(format=u'%(levelname)-8s - %(name)s [%(asctime)s] %(message)s', level=logging.ERROR)
     PRODUCTION = True
     DEBUG = False
