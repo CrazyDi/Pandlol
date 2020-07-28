@@ -50,6 +50,10 @@ class CheckUser:
             return {"code": 106,
                     "message": "password length couldn't be less than 6"}
 
+        if not self.confirm_password:
+            return {"code": 107,
+                    "message": "confirm password is empty"}
+
         if not check_password_hash(self.user.password_hash, self.confirm_password):
             return {"code": 104,
                     "message": "password and confirm password are not equal"}

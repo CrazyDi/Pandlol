@@ -3,7 +3,7 @@ from logging import getLogger
 from werkzeug.security import generate_password_hash
 
 from pandlol import db
-from utils import log_database_error
+from pandlol.utils import log_database_error
 
 
 logger = getLogger(__name__)  # объект логирования
@@ -89,7 +89,7 @@ class UserModel(db.Model):
 
     def update(self):
         """
-        Обновление данных о пользователе в БД 
+        Обновление данных о пользователе в БД
         """
         res = self._save_to_db()
         if res is None:
