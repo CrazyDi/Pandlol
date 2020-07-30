@@ -10,9 +10,9 @@ from pandlol.validation.user import CheckUser
 
 # Парсер данных пользователя
 user_parser = reqparse.RequestParser()
-user_parser.add_argument("email", type=str)
-user_parser.add_argument("password", type=str)
-user_parser.add_argument("confirm_password", type=str)
+user_parser.add_argument("email", default="", type=str)
+user_parser.add_argument("password", default="", type=str)
+user_parser.add_argument("confirm_password", default="", type=str)
 user_parser.add_argument("avatar", type=str)
 
 
@@ -24,7 +24,7 @@ class UserRegister(Resource):
         data = user_parser.parse_args()
         user = UserModel(data["email"], data["password"], data["avatar"])
 
-        check_user = CheckUser(user, data["confirm_password"], len(data["password"]))
+        check_user = CheckUser(user, data["confirm_password"], len(data.get("password", "")))
         check = Check()
 
         if not check.validate(email=[check_user.validate_email_format, check_user.validate_email_exists],

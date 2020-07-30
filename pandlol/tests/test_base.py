@@ -1,4 +1,3 @@
-from flask import Flask
 from flask_testing import TestCase
 
 from pandlol import app, db

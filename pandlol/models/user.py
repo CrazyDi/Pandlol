@@ -23,7 +23,10 @@ class UserModel(db.Model):
 
     def __init__(self, email: str, password: str, avatar: str):
         self.email = email
-        self.password_hash = generate_password_hash(password)
+        if password:
+            self.password_hash = generate_password_hash(password)
+        else:
+            self.password_hash = ""
         self.avatar = avatar
 
     def __repr__(self):
