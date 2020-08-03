@@ -21,7 +21,7 @@ class UserModel(db.Model):
     avatar = db.Column(db.String(80))  # Путь к аватару
     create_date = db.Column(db.DateTime, default=datetime.utcnow())  # Время создания пользователя
 
-    def __init__(self, email: str, password: str, avatar: str):
+    def __init__(self, email: str, password: str, avatar: str = ""):
         self.email = email
         if password:
             self.password_hash = generate_password_hash(password)

@@ -21,16 +21,22 @@ class UserRegister(Resource):
     Регистрация пользователя
     """
     def post(self):
+        # собираем данные параметров
         data = user_parser.parse_args()
-        user = UserModel(data["email"], data["password"], data["avatar"])
 
-        check_user = CheckUser(user, data["confirm_password"], len(data.get("password", "")))
+        # валидация
+        check_user = CheckUser(data["email"], data["password"], data["confirm_password"])
         check = Check()
 
         if not check.validate(email=[check_user.validate_email_format, check_user.validate_email_exists],
-                              password=[check_user.validate_password_format]):
+                              password=[check_user.validate_password_format],
+                              confirm_password=[check_user.validate_confirm_password]):
             return {"status": "ERROR", "errors": check.errors}
 
+        # если прошли валидацию - создаем объект пользователя
+        user = UserModel(data["email"], data["password"], data["avatar"])
+
+        # добавляем пользователя в базу
         res = user.insert()
         res_code = 200
         if res['status'] == "INTERNAL ERROR":
@@ -44,17 +50,24 @@ class UserLogin(Resource):
     Вход пользователя
     """
     def post(self):
+        # собираем данные из параметров
         data = user_parser.parse_args()
-        user = UserModel.find_by_email(data["email"])
 
-        check_user = CheckUser(user, data["password"], len(data["password"]))
+        # валидация
+        check_user = CheckUser(data["email"], data["password"], data["confirm_password"])
         check = Check()
 
+        # проверяем, есть ли такой пользователей
+        if not check.validate(email=[check_user.validate_email_format, check_user.validate_email_not_exists]):
+            return {"status": "ERROR", "errors": check.errors}
+
+        # если пользователь есть, проверяем пароль
         if not check.validate(password=[check_user.validate_password]):
             return {"status": "ERROR", "errors": check.errors}
 
-        access_token = create_access_token(identity=user.email)
-        refresh_token = create_refresh_token(identity=user.email)
+        # если прошла валидация, создаем токены
+        access_token = create_access_token(identity=data["email"])
+        refresh_token = create_refresh_token(identity=data["email"])
 
         return {"status": "OK",
                 "user": {"access_token": access_token,
