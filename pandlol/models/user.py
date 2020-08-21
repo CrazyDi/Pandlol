@@ -83,9 +83,7 @@ class UserModel(db.Model):
                     "errors":
                         {"email":
                             {"code": 102,
-                             "message": "email exists"
-                            }
-                        }
+                             "message": "email exists"}}
                     }
         else:
             return {"status": "INTERNAL ERROR"}

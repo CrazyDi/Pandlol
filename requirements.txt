@@ -5,6 +5,7 @@ Flask-RESTful
 Flask-Script
 Flask-SQLAlchemy
 Jinja2
+pandas
 psycopg2
 python-dotenv
 SQLAlchemy
