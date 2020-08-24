@@ -25,5 +25,6 @@ class Version(db.Model):
         """
         df = read_json(url_versions)
         df.columns = ["version_code"]
+        print(db.engine)
 
         df.to_sql("version_list", db.engine, if_exists="replace")
