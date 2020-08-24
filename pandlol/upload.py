@@ -7,5 +7,7 @@ from pandlol.upload.version import Version
 
 
 if __name__ == "__main__":
-    print(os.getcwd())
-    Version.upload()
+    # Если последняя версия не загружена
+    if not Version.check_version():
+        pass
+        # Version.upload()

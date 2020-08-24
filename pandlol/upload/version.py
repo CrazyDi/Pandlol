@@ -1,5 +1,7 @@
+import pandas as pd
+
+
 from logging import getLogger
-from pandas import read_json
 
 from pandlol import db
 from pandlol.constant import url_versions
@@ -19,12 +21,23 @@ class Version(db.Model):
 
     @classmethod
     @log_database_error(logger)
+    def check_version(cls):
+        """
+        Проверяем загружена ли последняя версия
+        """
+        df_out = pd.read_json(url_versions)
+        df_out.columns = ["version_code"]
+        df_in = pd.read_sql_table("version_list", db.engine, index_col=["index"])
+
+        return df_out["version_code"][0] in df_in["version_code"].values
+
+    @classmethod
+    @log_database_error(logger)
     def upload(cls):
         """
         Считываем в таблицу версии
         """
-        df = read_json(url_versions)
-        df.columns = ["version_code"]
-        print(db.engine)
+        df_out = pd.read_json(url_versions)
+        df_out.columns = ["version_code"]
 
-        df.to_sql("version_list", db.engine, if_exists="replace")
+        df_out.to_sql("version_list", db.engine, if_exists="replace")
