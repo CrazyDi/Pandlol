@@ -15,11 +15,11 @@ class UserModel(db.Model):
     """
     __tablename__ = 'user_list'
 
-    id = db.Column(db.Integer, primary_key=True)  # Идентификатор пользователя
-    email = db.Column(db.String(80), unique=True)  # Имя пользователя
-    password_hash = db.Column(db.String(180))  # Захешированный пароль
+    id = db.Column(db.Integer, primary_key=True, nullable=False)  # Идентификатор пользователя
+    email = db.Column(db.String(80), unique=True, nullable=False)  # Имя пользователя
+    password_hash = db.Column(db.String(180), nullable=False)  # Захешированный пароль
     avatar = db.Column(db.String(80))  # Путь к аватару
-    create_date = db.Column(db.DateTime, default=datetime.utcnow())  # Время создания пользователя
+    create_date = db.Column(db.DateTime, default=datetime.utcnow(), nullable=False)  # Время создания пользователя
 
     def __init__(self, email: str, password: str, avatar: str = ""):
         self.email = email

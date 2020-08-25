@@ -2,6 +2,7 @@ from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
 from pandlol import app, db
+from pandlol.upload import version
 
 # Объект миграции данных
 migrate = Migrate(app, db)
