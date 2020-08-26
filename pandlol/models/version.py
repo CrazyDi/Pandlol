@@ -8,7 +8,7 @@ from pandlol.utils import log_database_error
 logger = getLogger(__name__)  # объект логирования
 
 
-class Version(db.Model):
+class VersionModel(db.Model):
     """
     Модель таблицы версий
     """

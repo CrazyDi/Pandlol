@@ -7,7 +7,7 @@ from pandlol.utils import log_database_error
 logger = getLogger(__name__)  # объект логирования
 
 
-class Champion(db.Model):
+class ChampionModel(db.Model):
     """
     Модель таблицы чемпионов
     """
@@ -27,5 +27,15 @@ class Champion(db.Model):
         Сохранение записи в БД
         """
         db.session.add(self)
+        db.session.commit()
+        return None
+
+    @classmethod
+    @log_database_error(logger)
+    def delete_all_from_db(cls):
+        """
+        Удаление всех записей из таблицы
+        """
+        cls.query.delete()
         db.session.commit()
         return None
