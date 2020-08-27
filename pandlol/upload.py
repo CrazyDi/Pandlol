@@ -87,7 +87,7 @@ if __name__ == "__main__":
     # Если последняя версия не загружена
     last_version = get_last_version()
     print(last_version)
-    if not last_version == VersionModel.current_version().version_code:
+    # if not last_version == VersionModel.current_version().version_code:
         # pass
         upload_champion(last_version)
         upload_tag(last_version)
