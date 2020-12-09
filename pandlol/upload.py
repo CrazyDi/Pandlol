@@ -40,6 +40,7 @@ def upload_champion(version):
     new_df.columns = ["champion_name", "champion_id"]
 
     # удаляем старые записи
+    ChampionStatModel.delete_all_from_db()
     ChampionTagModel.delete_all_from_db()
     ChampionModel.delete_all_from_db()
 
@@ -107,7 +108,7 @@ def upload_champion_stat(version):
     champion_stat_df.columns = ["champion_id", "stat_code", "stat_value"]
 
     # удаляем старые записи
-    ChampionStatModel.delete_all_from_db()
+    # ChampionStatModel.delete_all_from_db()
 
     # записываем данные в таблицу
     champion_stat_df.to_sql("champion_stat", db.engine, if_exists="append", index=False)
