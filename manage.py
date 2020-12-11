@@ -3,6 +3,10 @@ from flask_migrate import Migrate, MigrateCommand
 
 from pandlol import app, db
 
+from pandlol.models.champion import ChampionModel
+from pandlol.models.user import UserModel
+from pandlol.models.version import VersionModel
+
 # Объект миграции данных
 migrate = Migrate(app, db)
 

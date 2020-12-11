@@ -10,7 +10,7 @@ app = Flask(__name__, template_folder='../www/public', static_folder='../www/pub
 # Считываем URI БД DATABASE_URL=
 load_dotenv("pandlol/.env", verbose=True)
 # Загружаем конфигурацию
-app.config.from_object("pandlol.default_config.ProductionConfig")
+app.config.from_object("pandlol.default_config.DevelopmentConfig")
 
 # Объект коннекта к БД
 db = SQLAlchemy(app)

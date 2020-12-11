@@ -3,7 +3,7 @@ from logging import getLogger
 from werkzeug.security import generate_password_hash
 
 from pandlol import db
-from utils import log_database_error
+from pandlol.utils import log_database_error
 
 
 logger = getLogger(__name__)  # объект логирования
@@ -15,15 +15,18 @@ class UserModel(db.Model):
     """
     __tablename__ = 'user_list'
 
-    id = db.Column(db.Integer, primary_key=True)  # Идентификатор пользователя
-    email = db.Column(db.String(80), unique=True)  # Имя пользователя
-    password_hash = db.Column(db.String(180))  # Захешированный пароль
+    id = db.Column(db.Integer, primary_key=True, nullable=False)  # Идентификатор пользователя
+    email = db.Column(db.String(80), unique=True, nullable=False)  # Имя пользователя
+    password_hash = db.Column(db.String(180), nullable=False)  # Захешированный пароль
     avatar = db.Column(db.String(80))  # Путь к аватару
-    create_date = db.Column(db.DateTime, default=datetime.utcnow())  # Время создания пользователя
+    create_date = db.Column(db.DateTime, default=datetime.utcnow(), nullable=False)  # Время создания пользователя
 
-    def __init__(self, email: str, password: str, avatar: str):
+    def __init__(self, email: str, password: str, avatar: str = ""):
         self.email = email
-        self.password_hash = generate_password_hash(password)
+        if password:
+            self.password_hash = generate_password_hash(password)
+        else:
+            self.password_hash = ""
         self.avatar = avatar
 
     def __repr__(self):
@@ -80,16 +83,14 @@ class UserModel(db.Model):
                     "errors":
                         {"email":
                             {"code": 102,
-                             "message": "email exists"
-                            }
-                        }
+                             "message": "email exists"}}
                     }
         else:
             return {"status": "INTERNAL ERROR"}
 
     def update(self):
         """
-        Обновление данных о пользователе в БД 
+        Обновление данных о пользователе в БД
         """
         res = self._save_to_db()
         if res is None:

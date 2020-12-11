@@ -26,6 +26,8 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     TESTING = True
     DEBUG = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///data.db'
+    PRESERVE_CONTEXT_ON_EXCEPTION = False
 
 
 # Настройки для продакшна
