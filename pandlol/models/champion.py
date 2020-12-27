@@ -130,32 +130,31 @@ class ChampionStatModel(db.Model):
         return None
 
 
-# class ChampionSpellModel(db.Model):
-#     """
-#     Модель таблицы умений чемпионов
-#     """
-#     __tablename__ = "champion_spell"
-#
-#     champion_spell_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-#     champion_id = db.Column(db.Integer, db.ForeignKey('champion_list.champion_id'), nullable=False)
-#     spell_code = db.Column(db.Integer, nullable=False, index=True)
-#     spell_name = db.Column(db.String(40), nullable=False, index=True)
-#
-#     @log_database_error(logger)
-#     def save_to_db(self):
-#         """
-#         Сохранение записи в БД
-#         """
-#         db.session.add(self)
-#         db.session.commit()
-#         return None
-#
-#     @classmethod
-#     @log_database_error(logger)
-#     def delete_all_from_db(cls):
-#         """
-#         Удаление всех записей из таблицы
-#         """
-#         cls.query.delete()
-#         db.session.commit()
-#         return None
+class ChampionSpellModel(db.Model):
+    """
+    Модель таблицы умений чемпионов
+    """
+    __tablename__ = "champion_spell"
+    champion_spell_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    champion_id = db.Column(db.Integer, db.ForeignKey('champion_list.champion_id'), nullable=False)
+    spell_code = db.Column(db.Integer, nullable=False, index=True)
+    spell_name = db.Column(db.String(40), nullable=False, index=True)
+
+    @log_database_error(logger)
+    def save_to_db(self):
+        """
+        Сохранение записи в БД
+        """
+        db.session.add(self)
+        db.session.commit()
+        return None
+
+    @classmethod
+    @log_database_error(logger)
+    def delete_all_from_db(cls):
+        """
+        Удаление всех записей из таблицы
+        """
+        cls.query.delete()
+        db.session.commit()
+        return None
