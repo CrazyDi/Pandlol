@@ -135,7 +135,6 @@ class ChampionSpellModel(db.Model):
     Модель таблицы умений чемпионов
     """
     __tablename__ = "champion_spell"
-
     champion_spell_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     champion_id = db.Column(db.Integer, db.ForeignKey('champion_list.champion_id'), nullable=False)
     spell_code = db.Column(db.Integer, nullable=False, index=True)
