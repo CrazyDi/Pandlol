@@ -7,9 +7,9 @@ from pandas import read_json, DataFrame, read_sql_table, merge
 from logging import getLogger
 
 from pandlol import db
-from pandlol.constant import url_versions, url_champions, stat
+from pandlol.constant import url_versions, url_champions, url_champions_full, stat
 from pandlol.models.version import VersionModel
-from pandlol.models.champion import ChampionModel, TagModel, ChampionTagModel, ChampionStatModel
+from pandlol.models.champion import ChampionModel, TagModel, ChampionTagModel, ChampionStatModel, ChampionSpellModel
 from pandlol.utils import log_database_error
 
 
@@ -40,6 +40,7 @@ def upload_champion(version):
     new_df.columns = ["champion_name", "champion_id"]
 
     # удаляем старые записи
+    ChampionSpellModel.delete_all_from_db()
     ChampionStatModel.delete_all_from_db()
     ChampionTagModel.delete_all_from_db()
     ChampionModel.delete_all_from_db()
@@ -114,6 +115,26 @@ def upload_champion_stat(version):
     champion_stat_df.to_sql("champion_stat", db.engine, if_exists="append", index=False)
 
 
+def upload_champion_spell(version):
+    """
+    Загрузка умений чемпионов
+    """
+    # исходные данные
+    champion_df = read_json(url_champions_full.format(version))["data"]
+
+    # преобразуем данные
+    champion_df = [x for x in champion_df if str(x) != 'nan']
+    champion_df = DataFrame(champion_df)[['key', 'spells']]
+    champion_df = DataFrame(list(champion_df.spells), index=champion_df.key)
+    champion_spell_df = champion_df.stack().reset_index(level=1).reset_index()
+    champion_spell_df['spell_name'] = champion_spell_df[0].apply(lambda x: x['id'])
+    champion_spell_df = champion_spell_df[['key', 'level_1', 'spell_name']]
+    champion_spell_df.columns = ['champion_id', 'spell_code', 'spell_name']
+
+    # записываем данные в таблицу
+    champion_spell_df.to_sql("champion_spell", db.engine, if_exists="append", index=False)
+
+
 if __name__ == "__main__":
     # Если последняя версия не загружена
     last_version = get_last_version()
@@ -124,4 +145,5 @@ if __name__ == "__main__":
     upload_tag(last_version)
     upload_champion_tag(last_version)
     upload_champion_stat(last_version)
+    upload_champion_spell(last_version)
     upload_version(last_version)
