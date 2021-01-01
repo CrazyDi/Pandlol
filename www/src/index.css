@@ -1,0 +1,46 @@
+@font-face {
+    font-family: Roboto-Regular;
+    src: url(fonts/Roboto-Regular.ttf);
+}
+@font-face {
+    font-family: Roboto-Medium;
+    src: url(fonts/Roboto-Medium.ttf);
+}
+
+html {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+}
+
+html,
+button,
+input,
+textarea {
+    font-family: Roboto-Regular, sans-serif;
+    font-size: 14px;
+    line-height: 16px;
+}
+
+input,
+textarea {
+    width: 100%;
+    border: none;
+    padding: 10px 14px;
+}
+
+textarea {
+    resize: none;
+}

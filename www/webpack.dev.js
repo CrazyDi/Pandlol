@@ -1,12 +1,12 @@
-const path = require('path');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const path = require('path')
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin').CleanWebpackPlugin
 
 module.exports = {
     mode: 'development',
     entry: {
-        app: './src/index.js'
+        app: './src/index.tsx'
     },
     output: {
         path: path.resolve(__dirname, 'public'),
@@ -23,53 +23,54 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(js)$/,
+                test: /\.(ts|tsx|js|jsx)$/,
                 exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',
                     options: {
                         presets: [
                             '@babel/preset-env',
-                            '@babel/preset-react'
-                        ],
-                        plugins: [
-                            '@babel/plugin-transform-arrow-functions',
-                            '@babel/plugin-proposal-class-properties'
+                            '@babel/preset-react',
+                            '@babel/preset-typescript'
                         ]
                     }
                 }
             },
             {
-                test: /\.scss$/,
-                use: ['style-loader', 'css-loader', 'sass-loader']
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader']
             },
-
             {
-                test: /\.(png|svg|jpg)$/,
-                use: 'file-loader'
+                test: /\.(png|jpg|svg)$/,
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name].[ext]'
+                    }
+                }]
             },
-
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/,
-                use: [
-                    'file-loader'
-                ]
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name].[ext]'
+                    }
+                }]
             }
         ]
     },
     resolve: {
-        extensions: ['*', '.js'],
+        extensions: ['.ts', '.tsx', '.js', '.jsx', '*'],
         alias: {
             app: path.resolve(__dirname, 'src/app/')
         }
     },
     plugins: [
         new CleanWebpackPlugin(),
-        new HtmlWebpackPlugin(
-            {
-                template: path.join(__dirname, 'src/index.html')
-            }
-        ),
+        new HtmlWebpackPlugin({
+            template: path.join(__dirname, 'src/index.html')
+        }),
         new webpack.HotModuleReplacementPlugin()
     ]
-};
+}
