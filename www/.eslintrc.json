@@ -1,44 +1,50 @@
 {
-  "env": {
-    "es6": true
-  },
-  "parser": "babel-eslint",
-  "plugins": [
-    "jsx-a11y"
-  ],
-  "rules": {
-    "indent": [
-      "error",
-      4,
-      {
-        "SwitchCase": 1
-      }
+    "env": {
+        "es6": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "@typescript-eslint"
     ],
-    "quotes": [
-      "error",
-      "single"
-    ],
-    "semi": [
-      "error",
-      "always"
-    ],
-    "jsx-a11y/label-has-associated-control": 0,
-    "jsx-a11y/interactive-supports-focus": 0,
-    "jsx-a11y/click-events-have-key-events": 0,
-    "jsx-a11y/no-noninteractive-element-interactions": 0,
-    "linebreak-style": [0],
-    "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 1 }],
-    "padding-line-between-statements": [
-      "error",
-      { "blankLine": "always", "prev": "*", "next": "return" },
-      { "blankLine": "always", "prev": ["const", "let", "var"], "next": "*" },
-      { "blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"] }
-    ],
-    "import/no-extraneous-dependencies": [0],
-    "no-underscore-dangle": [0],
-    "no-plusplus": "off",
-    "no-restricted-globals": [0],
-    "no-console": [0],
-    "max-len": ["error", { "code": 120 }]
-  }
+    "rules": {
+        "indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "max-len": [
+            "error",
+            {
+                "code": 120,
+                "ignoreRegExpLiterals": true,
+                "ignoreStrings": true,
+                "ignoreUrls": true
+            }
+        ],
+        "no-console": ["error"],
+        "no-debugger": ["error"],
+        "no-multiple-empty-lines": [
+            "error",
+            {
+                "max": 1,
+                "maxEOF": 1
+            }
+        ],
+        "padding-line-between-statements": [
+            "error",
+            { "blankLine": "always", "prev": "*", "next": "return" },
+            { "blankLine": "always", "prev": ["const", "let", "var"], "next": "*" },
+            { "blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"] }
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "never"
+        ]
+    }
 }

@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": "src/",
+        "target": "es6",
+        "lib": [
+            "dom",
+            "es6"
+        ],
+        "esModuleInterop": true,
+        "isolatedModules": true,
+        "jsx": "react",
+        "module": "CommonJS",
+        "moduleResolution": "node",
+        "noEmit": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "sourceMap": true,
+        "strict": true
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
