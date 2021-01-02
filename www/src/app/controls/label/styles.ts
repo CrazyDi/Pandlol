@@ -1,6 +1,6 @@
 import { createUseStyles } from 'react-jss'
 
-const textColor = '#000'
+const textColor = '#333'
 const disabledTextColor = '#999'
 
 export default createUseStyles({
