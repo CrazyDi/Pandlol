@@ -6,7 +6,7 @@ import api from 'app/common/api';
 import constants from 'app/common/constants';
 import Button from 'app/controls/button';
 import Form from 'app/components/form';
-import Loader from 'app/components/loader';
+import Loader from 'app/components/preloader';
 import Pipe from 'app/components/pipe';
 
 import './index.scss';
