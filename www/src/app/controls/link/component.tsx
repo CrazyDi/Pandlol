@@ -15,14 +15,16 @@ interface Props {
     type?: LinkType
     to: string
     target?: string
-    disabled?: Boolean
+    disabled?: boolean
     children?: React.ReactNode
     onFocus?: () => void
     onLostFocus?: () => void
 }
 
 const Link = (props: Props) => {
-    const classes = useStyles(props.disabled)
+    const classes = useStyles({
+        disabled: props.disabled
+    })
 
     const type = props.type || LinkType.Internal
     const className = clsx(classes.component, props.className)

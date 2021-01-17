@@ -1,12 +1,13 @@
 import { createUseStyles } from 'react-jss'
 
-const textColor = '#333'
-const disabledTextColor = '#999'
+export interface StyleProps {
+    disabled?: boolean
+}
 
 export default createUseStyles({
-    component: (disabled?: Boolean) => ({
+    component: (props: StyleProps) => ({
         display: 'inline-flex',
-        padding: '4px 0',
-        color: disabled ? disabledTextColor : textColor
+        margin: '4px',
+        color: props.disabled ? '#999' : '#333'
     })
 })

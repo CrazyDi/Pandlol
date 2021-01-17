@@ -5,12 +5,14 @@ import useStyles from './styles'
 
 interface Props {
     className?: string
-    disabled?: Boolean
+    disabled?: boolean
     children?: React.ReactNode
 }
 
 const Label = (props: Props) => {
-    const classes = useStyles(props.disabled)
+    const classes = useStyles({
+        disabled: props.disabled
+    })
 
     const className = clsx(classes.component, props.className)
 

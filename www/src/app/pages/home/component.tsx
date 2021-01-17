@@ -3,6 +3,7 @@ import React from 'react'
 import Label from 'app/controls/label'
 import Link, { LinkType } from 'app/controls/link'
 import Button from 'app/controls/button'
+import DropDown from 'app/controls/drop-down'
 import Preloader from 'app/components/preloader'
 import MasterPage from 'app/components/master-page'
 
@@ -27,6 +28,24 @@ const HomePage = (props: Props) => {
             <Button>Button</Button>
             <br/>
             <Preloader /><Label>Preloader Label</Label>
+            <br/>
+            <DropDown editable={true} items={[]} />
+            <br/>
+            <DropDown editable={true} items={[
+                { value: '1', text: 'item 1' },
+                { value: '2', text: 'item 2' },
+                { value: '3', text: 'item 3', disabled: true },
+                { value: '4', text: 'item 4' }
+            ]} />
+            <br/>
+            <DropDown items={[]}/>
+            <br/>
+            <DropDown items={[
+                {value: '1', text: 'item 1'},
+                {value: '2', text: 'item 2'},
+                {value: '3', text: 'item 3', disabled: true},
+                {value: '4', text: 'item 4'}
+            ]}/>
             <br/>
         </MasterPage>
     )

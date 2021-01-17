@@ -1,17 +1,17 @@
 import { createUseStyles } from 'react-jss'
 
-const textColor = '#33f'
-const disabledTextColor = '#999'
-const hoverTextColor = '#00f'
+export interface StyleProps {
+    disabled?: boolean
+}
 
 export default createUseStyles({
-    component: (disabled?: Boolean) => ({
+    component: (props: StyleProps) => ({
         display: 'inline-flex',
-        padding: '4px 0',
-        color: disabled ? disabledTextColor : textColor,
+        margin: '4px',
+        color: props.disabled ? '#999' : '#33f',
         '&:hover, &:active': {
-            color: disabled ? disabledTextColor : hoverTextColor,
+            color: props.disabled ? '#999' : '#00f',
         },
-        pointerEvents: disabled ? 'none' : 'auto'
+        pointerEvents: props.disabled ? 'none' : 'inherit'
     })
 })

@@ -5,7 +5,7 @@ import useStyles from './styles'
 
 interface Props {
     className?: string
-    disabled?: Boolean
+    disabled?: boolean
     children?: React.ReactNode
     onFocus?: () => void
     onLostFocus?: () => void
@@ -13,7 +13,9 @@ interface Props {
 }
 
 const Button = (props: Props) => {
-    const classes = useStyles(props.disabled)
+    const classes = useStyles({
+        disabled: props.disabled
+    })
 
     const className = clsx(classes.component, props.className)
     const attributes: { [index: string]: any } = {}
