@@ -1,19 +1,24 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import clsx from 'clsx'
 
 import IFocusable from '../IFocusable'
 
+import CheckBoxIcon from './icon'
 import useStyles from './styles'
 
 interface Props extends IFocusable {
     className?: string
+    checked?: boolean
     disabled?: boolean
     children?: React.ReactNode
-    onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+    onCheckedChanged?: (checked: boolean) => void
 }
 
-const Button = (props: Props) => {
+const CheckBox = (props: Props) => {
+    const [checked, setChecked] = useState<boolean>(!!props.checked)
+
     const classes = useStyles({
+        checked: checked,
         disabled: props.disabled
     })
 
@@ -37,11 +42,17 @@ const Button = (props: Props) => {
         }
     }
 
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        if (props.onClick) {
-            props.onClick(event)
+    const handleClick = () => {
+        setChecked(!checked)
+
+        if (props.onCheckedChanged) {
+            props.onCheckedChanged(!checked)
         }
     }
+
+    useEffect(() => {
+        setChecked(!!props.checked)
+    }, [props.checked])
 
     return (
         <button
@@ -51,9 +62,14 @@ const Button = (props: Props) => {
             onBlur={handleBlur}
             onClick={handleClick}
         >
-            {props.children}
+            <div className={classes.input}>
+                <CheckBoxIcon className={classes.icon} />
+            </div>
+            <div className={classes.text}>
+                {props.children}
+            </div>
         </button>
     )
 }
 
-export default Button
+export default CheckBox

@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react'
 import clsx from 'clsx'
 
+import IFocusable from '../IFocusable'
+
 import ArrowDownIcon from './arrow-down'
 import ArrowUpIcon from './arrow-up'
-
 import useStyles from './styles'
 
 export interface DropDownItem {
@@ -19,7 +20,7 @@ interface ItemState {
     inputText: string
 }
 
-interface Props {
+interface Props extends IFocusable {
     className?: string
     editable?: boolean
     disabled?: boolean
@@ -37,12 +38,8 @@ interface Props {
 }
 
 const DropDown = (props: Props) => {
-    const classes = useStyles({
-        disabled: props.disabled,
-        editable: props.editable
-    })
-
     const [items, setItems] = useState<DropDownItem[]>(props.items)
+    const [focused, setFocused] = useState<boolean>(false)
     const [expanded, setExpanded] = useState<boolean>(false)
     const [selectedIndex, setSelectedIndex] = useState<number>(props.selectedIndex || -1)
     const [selectedValue, setSelectedValue] = useState<string>(props.selectedValue || '')
@@ -53,6 +50,11 @@ const DropDown = (props: Props) => {
 
     const inputRef = useRef<HTMLInputElement>(null)
     const inputButtonRef = useRef<HTMLButtonElement>(null)
+
+    const classes = useStyles({
+        disabled: props.disabled,
+        editable: props.editable
+    })
 
     let focusing = false
     let touchable = false
@@ -151,13 +153,26 @@ const DropDown = (props: Props) => {
 
         setTimeout(() => {
             if (!focusing) {
+                setFocused(false)
                 setExpanded(false)
+
+                if (props.onLostFocus) {
+                    props.onLostFocus()
+                }
             }
         })
     }
 
     const handleFocus = () => {
         focusing = true
+
+        if (!focused) {
+            setFocused(true)
+
+            if (props.onFocus) {
+                props.onFocus()
+            }
+        }
     }
 
     const handleInputFocus = () => {

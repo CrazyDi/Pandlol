@@ -3,6 +3,7 @@ import React from 'react'
 import Label from 'app/controls/label'
 import Link, { LinkType } from 'app/controls/link'
 import Button from 'app/controls/button'
+import CheckBox from 'app/controls/check-box'
 import DropDown from 'app/controls/drop-down'
 import Preloader from 'app/components/preloader'
 import MasterPage from 'app/components/master-page'
@@ -27,6 +28,14 @@ const HomePage = (props: Props) => {
             <br/>
             <Button>Button</Button>
             <br/>
+
+            <CheckBox>CheckBox</CheckBox>
+            <br/>
+            <CheckBox disabled>Disabled CheckBox</CheckBox>
+            <br/>
+            <CheckBox disabled checked>Disabled Checked CheckBox</CheckBox>
+            <br/>
+
             <Preloader /><Label>Preloader Label</Label>
             <br/>
             <DropDown editable={true} items={[]} />

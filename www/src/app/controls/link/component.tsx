@@ -2,6 +2,8 @@ import React from 'react'
 import { Link as RouterLink, NavLink as RouterNavLink } from 'react-router-dom'
 import clsx from 'clsx'
 
+import IFocusable from '../IFocusable'
+
 import useStyles from './styles'
 
 export enum LinkType {
@@ -10,15 +12,13 @@ export enum LinkType {
     External
 }
 
-interface Props {
+interface Props extends IFocusable {
     className?: string
     type?: LinkType
     to: string
     target?: string
     disabled?: boolean
     children?: React.ReactNode
-    onFocus?: () => void
-    onLostFocus?: () => void
 }
 
 const Link = (props: Props) => {
