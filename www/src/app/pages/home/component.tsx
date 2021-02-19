@@ -4,6 +4,8 @@ import Label from 'app/controls/label'
 import Link, { LinkType } from 'app/controls/link'
 import Button from 'app/controls/button'
 import CheckBox from 'app/controls/check-box'
+import RadioButtons from 'app/controls/radio-buttons'
+import RadioButton from 'app/controls/radio-buttons/radio-button'
 import DropDown from 'app/controls/drop-down'
 import Preloader from 'app/components/preloader'
 import MasterPage from 'app/components/master-page'
@@ -34,6 +36,19 @@ const HomePage = (props: Props) => {
             <CheckBox disabled>Disabled CheckBox</CheckBox>
             <br/>
             <CheckBox disabled checked>Disabled Checked CheckBox</CheckBox>
+            <br/>
+
+            <RadioButtons>
+                <RadioButton value="1">RadioButton 1</RadioButton>
+                <RadioButton value="2" disabled>Disabled RadioButton 2</RadioButton>
+                <RadioButton value="3">RadioButton 3</RadioButton>
+            </RadioButtons>
+            <br/>
+            <RadioButtons>
+                <RadioButton value="1">RadioButton 1</RadioButton>
+                <RadioButton value="2" disabled>Disabled RadioButton 2</RadioButton>
+                <RadioButton value="3">RadioButton 3</RadioButton>
+            </RadioButtons>
             <br/>
 
             <Preloader /><Label>Preloader Label</Label>

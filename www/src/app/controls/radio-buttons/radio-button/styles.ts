@@ -1,7 +1,7 @@
 import { createUseStyles } from 'react-jss'
 
 export interface StyleProps {
-    checked?: boolean
+    checked: boolean
     disabled?: boolean
 }
 
@@ -13,6 +13,7 @@ export default createUseStyles({
         backgroundColor: 'initial',
         margin: '4px',
         padding: '0px',
+        color: props.disabled ? '#999' : '#333',
         cursor: props.disabled ? 'default' : 'pointer',
         pointerEvents: props.disabled ? 'none' : 'inherit'
     }),
@@ -22,6 +23,7 @@ export default createUseStyles({
         justifyContent: 'center',
         width: '22px',
         height: '22px',
+        borderRadius: '50%',
         backgroundColor: props.disabled ? '#eee' : '#fff',
         border: '1px solid #ccc',
         marginRight: '4px'
