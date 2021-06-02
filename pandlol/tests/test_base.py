@@ -1,6 +1,8 @@
 from flask_testing import TestCase
 
-from pandlol import app, db
+from pandlol import app
+
+from mongoengine import connect, disconnect
 
 
 class BaseCase(TestCase):
@@ -9,8 +11,8 @@ class BaseCase(TestCase):
         return app
 
     def setUp(self):
-        db.create_all()
+        disconnect()
+        connect('mongoenginetest', host='mongomock://localhost')
 
     def tearDown(self):
-        db.session.remove()
-        db.drop_all()
+        disconnect()

@@ -1,6 +1,6 @@
 from flask_jwt_extended import \
-    (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity,
-     get_raw_jwt)
+    (create_access_token, create_refresh_token, jwt_required, get_jwt_identity,
+     get_jwt)
 from flask_restful import Resource, reqparse
 
 from pandlol import blacklist
@@ -28,21 +28,24 @@ class UserRegister(Resource):
         check_user = CheckUser(data["email"], data["password"], data["confirm_password"])
         check = Check()
 
-        if not check.validate(email=[check_user.validate_email_format, check_user.validate_email_exists],
-                              password=[check_user.validate_password_format],
-                              confirm_password=[check_user.validate_confirm_password]):
+        if not check.validate(
+                email=[check_user.validate_email_format, check_user.validate_email_exists],
+                password=[check_user.validate_password_format],
+                confirm_password=[check_user.validate_confirm_password]):
             return {"status": "ERROR", "errors": check.errors}
 
         # если прошли валидацию - создаем объект пользователя
-        user = UserModel(data["email"], data["password"], data["avatar"])
+        user = UserModel(
+            email=data["email"],
+            password=data["password"],
+            avatar=data["avatar"]
+        )
 
         # добавляем пользователя в базу
-        res = user.insert()
+        user.save()
         res_code = 200
-        if res['status'] == "INTERNAL ERROR":
-            res_code = 503
 
-        return res, res_code
+        return {"status": "OK"}, res_code
 
 
 class UserLogin(Resource):
@@ -78,7 +81,7 @@ class TokenRefresh(Resource):
     """
     Обновление access token для пользоателя. Требует refresh token
     """
-    @jwt_refresh_token_required
+    @jwt_required(refresh=True)
     def post(self):
         current_user = get_jwt_identity()
         if current_user is None:
@@ -113,8 +116,8 @@ class UserLogout(Resource):
     """
     Выход пользователя. Требует access token
     """
-    @jwt_required
+    @jwt_required()
     def post(self):
-        jti = get_raw_jwt()['jti']
+        jti = get_jwt()['jti']
         blacklist.add(jti)
         return {"status": "OK"}

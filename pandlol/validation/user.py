@@ -33,7 +33,7 @@ class CheckUser:
         """
         Проверка существования такого пользователя в БД
         """
-        if UserModel.find_by_email(self.email):
+        if UserModel.objects(email=self.email).first():
             return {"code": 102,
                     "message": "email exists"}
         return {}
@@ -74,10 +74,10 @@ class CheckUser:
             return {"code": 103,
                     "message": "password is empty"}
 
-        user = UserModel.find_by_email(self.email)
+        user = UserModel.objects(email=self.email).first()
 
         if user:
-            if not check_password_hash(user.password_hash, self.password):
+            if not check_password_hash(user.password, self.password):
                 return {"code": 105,
                         "message": "wrong password"}
 
@@ -87,7 +87,7 @@ class CheckUser:
         """
         Проверка существования такого пользователя в БД
         """
-        if not UserModel.find_by_email(self.email):
+        if not UserModel.objects(email=self.email).first():
             return {"code": 108,
                     "message": "email doesn't exist"}
         return {}
