@@ -18,6 +18,7 @@ class Config:
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
     PROPAGATE_EXCEPTIONS = True
+    MONGO_URI = os.environ.get('MONGO_URI')
     MONGODB_SETTINGS = {
         'db': 'pandlol',
         'host': os.environ.get('MONGO_HOST'),
@@ -33,7 +34,6 @@ class DevelopmentConfig(Config):
     ENV = "development"
     DEVELOPMENT = True
     DEBUG = True
-
 
 
 # Настройки для тестирования

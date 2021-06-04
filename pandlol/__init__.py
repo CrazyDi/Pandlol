@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from flask import Flask, render_template
 from flask_jwt_extended import JWTManager
+from flask_pymongo import PyMongo
 from flask_mongoengine import MongoEngine
 from flask_restful import Api
 
@@ -14,7 +15,9 @@ app.config.from_object("pandlol.default_config.DevelopmentConfig")
 
 # Объект коннекта к БД
 # db = SQLAlchemy(app)
-mongo_db = MongoEngine(app)
+mongo_engine = MongoEngine(app)
+mongo_db = PyMongo(app)
+
 
 # Объект API
 api = Api(app)
@@ -36,12 +39,17 @@ def check_if_token_is_revoked(jwt_header, jwt_payload):
 # Загрузка endpoint для пользователя
 from pandlol.resources.user import UserRegister, UserLogin, TokenRefresh, UserLogout, UserProfile
 
-
 api.add_resource(UserRegister, '/api/signup')  # регистрация пользователя
 api.add_resource(UserLogin, '/api/login')  # вход пользователя
 api.add_resource(TokenRefresh, '/api/refresh')  # обновление access token
 api.add_resource(UserLogout, '/api/logout')  # выход пользователя
 api.add_resource(UserProfile, '/api/profile')  # профиль пользователя (скорее для проверки)
+
+
+# Загрузка edpoint для списка чемпионов
+from pandlol.resources.champion_list import ChampionList
+
+api.add_resource(ChampionList, '/api/champion_list')  # запрос на список чемпионов
 
 
 # домашняя страница

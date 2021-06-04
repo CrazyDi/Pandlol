@@ -2,23 +2,23 @@ from datetime import datetime
 from logging import getLogger
 from werkzeug.security import generate_password_hash
 
-from pandlol import mongo_db
+from pandlol import mongo_engine
 
 
 logger = getLogger(__name__)  # объект логирования
 
 
-class UserModel(mongo_db.Document):
+class UserModel(mongo_engine.Document):
     """
     Модель пользователя
     """
     meta = {'collection': 'user_list'}
 
-    email = mongo_db.StringField(required=True)  # Имя пользователя
-    password = mongo_db.StringField(required=True)  # Захешированный пароль
-    password_hashed = mongo_db.BooleanField(default=False)  # Признак хеширования пароля
-    avatar = mongo_db.StringField()  # Путь к аватару
-    create_date = mongo_db.DateTimeField(default=datetime.utcnow(), required=True)  # Время создания пользователя
+    email = mongo_engine.StringField(required=True)  # Имя пользователя
+    password = mongo_engine.StringField(required=True)  # Захешированный пароль
+    password_hashed = mongo_engine.BooleanField(default=False)  # Признак хеширования пароля
+    avatar = mongo_engine.StringField()  # Путь к аватару
+    create_date = mongo_engine.DateTimeField(default=datetime.utcnow(), required=True)  # Время создания пользователя
 
     def clean(self):
         if not self.password_hashed:
