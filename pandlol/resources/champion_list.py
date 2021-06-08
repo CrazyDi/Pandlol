@@ -2,8 +2,8 @@ import pandas as pd
 
 from flask_restful import Resource, reqparse
 
-from pandlol import mongo_db
 from pandlol.constant import URL_VERSION, URL_CHAMPION
+from pandlol.models.match_list import MatchList
 
 
 champion_list_parser = reqparse.RequestParser()
@@ -26,24 +26,40 @@ class ChampionList(Resource):
             if item:
                 if key in ['patch', 'platform']:
                     request_params[key] = {'$in': item.split(',')}
-                else:
+                elif key in ['queue', 'tier', 'division']:
                     request_params[key] = {'$in': [int(i) for i in item.split(',')]}
 
-        # запрос в базу по матчам
-        df = pd.DataFrame(list(mongo_db.db.match_detail.find(request_params)))
+        request_params['early_surr'] = False
 
         # последняя версия
         df_version = pd.read_json(URL_VERSION)
 
         # список чемпионов
-        df_champion_list = pd.read_json(URL_CHAMPION.format(df_version[0][0]))
-        df_champion_list = pd.DataFrame(df_champion_list["data"].index)
-        df_champion_list.rename(columns={0: "name"})
+        df_champion_list = pd.DataFrame(pd.read_json(URL_CHAMPION.format(df_version[0][0])).index).\
+            rename(columns={0: "name"}).\
+            set_index("name")
+
+        match_list = MatchList(request_params)
+
+        # количество всего выбранных игр
+        match_count = round(match_list.count() / 10)
 
         # pick rate
-        df.groupby("")
+        df_pick = match_list.champion_list('pick')
 
-        result_data = []
+        # ban rate
+        df_ban = match_list.champion_list('ban')
+
+        # win rate
+        request_params['win'] = True
+        df_win = match_list.champion_list('win')
+
+        df_champion_list = df_champion_list.join(df_pick).join(df_ban).join(df_win)
+        df_champion_list['pick_rate'] = round(df_champion_list['pick'] / match_count * 100, 2)
+        df_champion_list['ban_rate'] = round(df_champion_list['ban'] / match_count * 100, 2)
+        df_champion_list['win_rate'] = round(df_champion_list['win'] / df_champion_list['pick'] * 100, 2)
+
+        result_data = df_champion_list.sort_values("name").to_dict('index')
 
         result = {
             "status": "OK",
