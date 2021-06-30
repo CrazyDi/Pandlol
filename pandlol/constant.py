@@ -1,6 +1,8 @@
 URL_VERSION = "https://ddragon.leagueoflegends.com/api/versions.json"
 URL_CHAMPION = "http://ddragon.leagueoflegends.com/cdn/{}/data/en_US/champion.json"
 
+URL_SERVER = "http://127.0.0.1:5000"
+
 QUEUE = {
     420:
         {

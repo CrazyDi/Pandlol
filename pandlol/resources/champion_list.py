@@ -1,5 +1,4 @@
 import pandas as pd
-import sys
 
 from flask_restful import Resource, reqparse
 

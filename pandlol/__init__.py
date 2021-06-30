@@ -49,7 +49,7 @@ api.add_resource(UserProfile, '/api/profile')  # профиль пользова
 # Загрузка edpoint для списка чемпионов
 from pandlol.resources.champion_list import ChampionList
 
-api.add_resource(ChampionList, '/api/champion_list')  # запрос на список чемпионов
+api.add_resource(ChampionList, '/api/champions')  # запрос на список чемпионов
 
 
 # домашняя страница

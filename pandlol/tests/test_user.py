@@ -1,6 +1,7 @@
 import unittest
 import json
 
+from pandlol.constant import URL_SERVER
 from pandlol.tests.test_base import BaseCase
 from pandlol.models.user import UserModel
 
@@ -24,7 +25,7 @@ class TestUserRegistrationCase(BaseCase):
         Тест успешной регистрации
         """
         response = self.client.post(
-            'http://127.0.0.1:5000/api/signup',
+            f"{URL_SERVER}/api/signup",
             headers={"Content-Type": "application/json"},
             data=json.dumps(self.payload)
         )
@@ -38,7 +39,7 @@ class TestUserRegistrationCase(BaseCase):
         """
         self.payload["email"] = ""
         response = self.client.post(
-            'http://127.0.0.1:5000/api/signup',
+            f"{URL_SERVER}/api/signup",
             headers={"Content-Type": "application/json"},
             data=json.dumps(self.payload)
         )
@@ -53,7 +54,7 @@ class TestUserRegistrationCase(BaseCase):
         """
         self.payload["email"] = "kate"
         response = self.client.post(
-            'http://127.0.0.1:5000/api/signup',
+            f"{URL_SERVER}/api/signup",
             headers={"Content-Type": "application/json"},
             data=json.dumps(self.payload)
         )
@@ -73,7 +74,7 @@ class TestUserRegistrationCase(BaseCase):
         user.save()
 
         response = self.client.post(
-            'http://127.0.0.1:5000/api/signup',
+            f"{URL_SERVER}/api/signup",
             headers={"Content-Type": "application/json"},
             data=json.dumps(self.payload)
         )
@@ -88,7 +89,7 @@ class TestUserRegistrationCase(BaseCase):
         """
         self.payload["password"] = ""
         response = self.client.post(
-            'http://127.0.0.1:5000/api/signup',
+            f"{URL_SERVER}/api/signup",
             headers={"Content-Type": "application/json"},
             data=json.dumps(self.payload)
         )
@@ -103,7 +104,7 @@ class TestUserRegistrationCase(BaseCase):
         """
         self.payload["confirm_password"] = "222222"
         response = self.client.post(
-            'http://127.0.0.1:5000/api/signup',
+            f"{URL_SERVER}/api/signup",
             headers={"Content-Type": "application/json"},
             data=json.dumps(self.payload)
         )
@@ -119,7 +120,7 @@ class TestUserRegistrationCase(BaseCase):
         self.payload["password"] = "1"
         self.payload["confirm_password"] = "1"
         response = self.client.post(
-            'http://127.0.0.1:5000/api/signup',
+            f"{URL_SERVER}/api/signup",
             headers={"Content-Type": "application/json"},
             data=json.dumps(self.payload)
         )
@@ -134,7 +135,7 @@ class TestUserRegistrationCase(BaseCase):
         """
         self.payload["confirm_password"] = ""
         response = self.client.post(
-            'http://127.0.0.1:5000/api/signup',
+            f"{URL_SERVER}/api/signup",
             headers={"Content-Type": "application/json"},
             data=json.dumps(self.payload)
         )
@@ -165,7 +166,8 @@ class TestUserLoginCase(BaseCase):
         """
         Тест успешного логина
         """
-        response = self.client.post('http://127.0.0.1:5000/api/login', headers={"Content-Type": "application/json"},
+        response = self.client.post(f"{URL_SERVER}/api/login",
+                                    headers={"Content-Type": "application/json"},
                                     data=json.dumps(self.payload))
         json_data = response.get_json()
         self.assert200(response)
@@ -178,7 +180,8 @@ class TestUserLoginCase(BaseCase):
         Тест логина с пустым email
         """
         self.payload["email"] = ""
-        response = self.client.post('http://127.0.0.1:5000/api/login', headers={"Content-Type": "application/json"},
+        response = self.client.post(f"{URL_SERVER}/api/login",
+                                    headers={"Content-Type": "application/json"},
                                     data=json.dumps(self.payload))
         json_data = response.get_json()
         self.assert200(response)
@@ -190,7 +193,8 @@ class TestUserLoginCase(BaseCase):
         Тест логина с неверным форматом email
         """
         self.payload["email"] = "1"
-        response = self.client.post('http://127.0.0.1:5000/api/login', headers={"Content-Type": "application/json"},
+        response = self.client.post(f"{URL_SERVER}/api/login",
+                                    headers={"Content-Type": "application/json"},
                                     data=json.dumps(self.payload))
         json_data = response.get_json()
         self.assert200(response)
@@ -202,7 +206,8 @@ class TestUserLoginCase(BaseCase):
         Тест логина для несуществующего пользователя
         """
         self.payload["email"] = "test2@test.com"
-        response = self.client.post('http://127.0.0.1:5000/api/login', headers={"Content-Type": "application/json"},
+        response = self.client.post(f"{URL_SERVER}/api/login",
+                                    headers={"Content-Type": "application/json"},
                                     data=json.dumps(self.payload))
         json_data = response.get_json()
         self.assert200(response)
@@ -214,7 +219,8 @@ class TestUserLoginCase(BaseCase):
         Тест логина с пустым паролем
         """
         self.payload["password"] = ""
-        response = self.client.post('http://127.0.0.1:5000/api/login', headers={"Content-Type": "application/json"},
+        response = self.client.post(f"{URL_SERVER}/api/login",
+                                    headers={"Content-Type": "application/json"},
                                     data=json.dumps(self.payload))
         json_data = response.get_json()
         self.assert200(response)
@@ -226,7 +232,8 @@ class TestUserLoginCase(BaseCase):
         Тест логина с неверным паролем
         """
         self.payload["password"] = "222222"
-        response = self.client.post('http://127.0.0.1:5000/api/login', headers={"Content-Type": "application/json"},
+        response = self.client.post(f"{URL_SERVER}/api/login",
+                                    headers={"Content-Type": "application/json"},
                                     data=json.dumps(self.payload))
         json_data = response.get_json()
         self.assert200(response)
@@ -252,7 +259,8 @@ class TestUserRefreshTokenCase(BaseCase):
         )
         user.save()
 
-        response = self.client.post('http://127.0.0.1:5000/api/login', headers={"Content-Type": "application/json"},
+        response = self.client.post(f"{URL_SERVER}/api/login",
+                                    headers={"Content-Type": "application/json"},
                                     data=json.dumps(self.payload))
         json_data = response.get_json()
         self.access_token = json_data["user"]["access_token"]
@@ -263,7 +271,8 @@ class TestUserRefreshTokenCase(BaseCase):
         Тест успешного обновления access_token
         """
         authorization = 'Bearer ' + self.refresh_token
-        response = self.client.post('http://127.0.0.1:5000/api/refresh', headers={"Authorization": authorization},
+        response = self.client.post(f"{URL_SERVER}/api/refresh",
+                                    headers={"Authorization": authorization},
                                     data=json.dumps(self.payload))
         json_data = response.get_json()
         self.assert200(response)
@@ -275,7 +284,8 @@ class TestUserRefreshTokenCase(BaseCase):
         Тест обновления с неверным токеном
         """
         authorization = 'Bearer ' + self.refresh_token + "111"
-        response = self.client.post('http://127.0.0.1:5000/api/refresh', headers={"Authorization": authorization},
+        response = self.client.post(f"{URL_SERVER}/api/refresh",
+                                    headers={"Authorization": authorization},
                                     data=json.dumps(self.payload))
         self.assertEqual(response.status_code, 422)
 
@@ -298,7 +308,8 @@ class TestUserLogoutCase(BaseCase):
         )
         user.save()
 
-        response = self.client.post('http://127.0.0.1:5000/api/login', headers={"Content-Type": "application/json"},
+        response = self.client.post(f"{URL_SERVER}/api/login",
+                                    headers={"Content-Type": "application/json"},
                                     data=json.dumps(self.payload))
         json_data = response.get_json()
         self.access_token = json_data["user"]["access_token"]
@@ -308,7 +319,8 @@ class TestUserLogoutCase(BaseCase):
         Тест успешного выхода пользователя
         """
         authorization = 'Bearer ' + self.access_token
-        response = self.client.post('http://127.0.0.1:5000/api/logout', headers={"Authorization": authorization},
+        response = self.client.post(f"{URL_SERVER}/api/logout",
+                                    headers={"Authorization": authorization},
                                     data=json.dumps(self.payload))
         json_data = response.get_json()
         self.assert200(response)
@@ -319,7 +331,8 @@ class TestUserLogoutCase(BaseCase):
         Тест выхода пользователя с неверным токеном
         """
         authorization = 'Bearer ' + self.access_token + "111"
-        response = self.client.post('http://127.0.0.1:5000/api/logout', headers={"Authorization": authorization},
+        response = self.client.post(f"{URL_SERVER}/api/logout",
+                                    headers={"Authorization": authorization},
                                     data=json.dumps(self.payload))
         self.assertEqual(response.status_code, 422)
 
@@ -328,9 +341,11 @@ class TestUserLogoutCase(BaseCase):
         Тест выхода пользователя с токеном уже вышедшего пользователя
         """
         authorization = 'Bearer ' + self.access_token
-        response = self.client.post('http://127.0.0.1:5000/api/logout', headers={"Authorization": authorization},
+        response = self.client.post(f"{URL_SERVER}/api/logout",
+                                    headers={"Authorization": authorization},
                                     data=json.dumps(self.payload))
-        response = self.client.post('http://127.0.0.1:5000/api/logout', headers={"Authorization": authorization},
+        response = self.client.post(f"{URL_SERVER}/api/logout",
+                                    headers={"Authorization": authorization},
                                     data=json.dumps(self.payload))
         self.assertEqual(response.status_code, 401)
 
