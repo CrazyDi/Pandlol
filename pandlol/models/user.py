@@ -2,108 +2,25 @@ from datetime import datetime
 from logging import getLogger
 from werkzeug.security import generate_password_hash
 
-from pandlol import db
-from pandlol.utils import log_database_error
+from pandlol import mongo_engine
 
 
 logger = getLogger(__name__)  # объект логирования
 
 
-class UserModel(db.Model):
+class UserModel(mongo_engine.Document):
     """
     Модель пользователя
     """
-    __tablename__ = 'user_list'
+    meta = {'collection': 'user_list'}
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False)  # Идентификатор пользователя
-    email = db.Column(db.String(80), unique=True, nullable=False)  # Имя пользователя
-    password_hash = db.Column(db.String(180), nullable=False)  # Захешированный пароль
-    avatar = db.Column(db.String(80))  # Путь к аватару
-    create_date = db.Column(db.DateTime, default=datetime.utcnow(), nullable=False)  # Время создания пользователя
+    email = mongo_engine.StringField(required=True)  # Имя пользователя
+    password = mongo_engine.StringField(required=True)  # Захешированный пароль
+    password_hashed = mongo_engine.BooleanField(default=False)  # Признак хеширования пароля
+    avatar = mongo_engine.StringField()  # Путь к аватару
+    create_date = mongo_engine.DateTimeField(default=datetime.utcnow(), required=True)  # Время создания пользователя
 
-    def __init__(self, email: str, password: str, avatar: str = ""):
-        self.email = email
-        if password:
-            self.password_hash = generate_password_hash(password)
-        else:
-            self.password_hash = ""
-        self.avatar = avatar
-
-    def __repr__(self):
-        return f'User {self.email}'
-
-    @classmethod
-    def find_by_email(cls, email: str):
-        """
-        Поиск пользователя в БД по email
-        """
-        try:
-            return cls.query.filter_by(email=email).first()
-        except:
-            logger.exception("Exception occurred in func find_by_email")
-            return None
-
-    def json(self):
-        """
-        Вывод информации о пользователе в JSON-формате
-        """
-        return {
-            "id": self.id,
-            "email": self.email,
-            "avatar": self.avatar
-        }
-
-    @log_database_error(logger)
-    def _save_to_db(self):
-        """
-        Сохранение пользователя в БД
-        """
-        db.session.add(self)
-        db.session.commit()
-        return None
-
-    @log_database_error(logger)
-    def _delete_from_db(self):
-        """
-        Удаление пользователя из БД
-        """
-        db.session.delete(self)
-        db.session.commit()
-        return None
-
-    def insert(self):
-        """
-        Добавление нового пользователя в систему
-        """
-        res = self._save_to_db()
-        if res is None:
-            return {"status": "OK"}
-        elif res == '23505':
-            return {"status": "ERROR",
-                    "errors":
-                        {"email":
-                            {"code": 102,
-                             "message": "email exists"}}
-                    }
-        else:
-            return {"status": "INTERNAL ERROR"}
-
-    def update(self):
-        """
-        Обновление данных о пользователе в БД
-        """
-        res = self._save_to_db()
-        if res is None:
-            return {"status": "OK"}
-        else:
-            return {"status": "INTERNAL ERROR"}
-
-    def delete(self):
-        """
-        Удаление сведений о пользователе из БД
-        """
-        res = self._delete_from_db()
-        if res is None:
-            return {"status": "OK"}
-        else:
-            return {"status": "INTERNAL ERROR"}
+    def clean(self):
+        if not self.password_hashed:
+            self.password = generate_password_hash(self.password)
+            self.password_hashed = True
