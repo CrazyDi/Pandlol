@@ -1,26 +1,16 @@
 import pandas as pd
 
-from flask_pymongo.wrappers import Collection
 from typing import Dict
 
-from pandlol import mongo_db
+from pandlol.models.base_model import BaseModel
 
 
-class MatchList:
+class MatchList(BaseModel):
     """
     Объект списка матчей
     """
-    table: Collection = None
-
     def __init__(self, request_params: Dict):
-        self.table = mongo_db.db.match_detail
-        self.params = request_params
-
-    def count(self):
-        """
-        Количество записей в таблице
-        """
-        return self.table.find(self.params).count()
+        super().__init__(table_name="match_detail", request_params=request_params)
 
     def champion_list(self, request: str):
         """
