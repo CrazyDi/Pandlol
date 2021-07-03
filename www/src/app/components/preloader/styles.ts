@@ -1,6 +1,14 @@
 import { createUseStyles } from 'react-jss'
 
 export default createUseStyles({
+    '@keyframes preloader-dual-ring': {
+        '0%': {
+            transform: 'rotate(0deg)'
+        },
+        '100%': {
+            transform: 'rotate(360deg)',
+        }
+    },
     component: {
         position: 'relative',
         display: 'inline-flex',

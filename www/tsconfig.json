@@ -1,26 +1,35 @@
 {
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
-        "baseUrl": "src/",
-        "target": "es6",
-        "lib": [
-            "dom",
-            "es6"
-        ],
+        "baseUrl": "./",
         "esModuleInterop": true,
         "isolatedModules": true,
         "jsx": "react",
+        "lib": [
+            "es6",
+            "dom"
+        ],
         "module": "CommonJS",
         "moduleResolution": "node",
         "noEmit": true,
+        "noImplicitAny": true,
+        "noUnusedLocals": true,
+        "outDir": "dist",
+        "paths": {
+            "controls/*": [
+                "controls/*"
+            ],
+            "*": [
+                "src/*"
+            ]
+        },
+        "removeComments": true,
         "resolveJsonModule": true,
         "skipLibCheck": true,
         "sourceMap": true,
-        "strict": true
+        "strict": true,
+        "target": "es6"
     },
-    "include": [
-        "src/**/*"
-    ],
     "exclude": [
         "node_modules"
     ]
