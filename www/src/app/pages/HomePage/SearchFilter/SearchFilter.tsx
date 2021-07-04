@@ -1,12 +1,21 @@
 import React from 'react'
 import Button from 'controls/Button'
+import IChampionListFilter from 'app/interfaces/IChampionListFilter'
 import useStyles from './styles'
 
 interface Props {
+    onSearch: (filter: IChampionListFilter) => void
 }
 
 const HomePageSearchFilter = (props: Props) => {
     const classes = useStyles()
+
+    const handleSearch = () => {
+        const filter: IChampionListFilter = {
+        }
+
+        props.onSearch(filter)
+    }
 
     return (
         <div className={classes.root}>
@@ -14,7 +23,9 @@ const HomePageSearchFilter = (props: Props) => {
                 <Button>Expand</Button>
             </div>
             <div>
-                <Button>Search</Button>
+                <Button onClick={handleSearch}>
+                    Search
+                </Button>
             </div>
         </div>
     )

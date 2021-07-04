@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Label from 'controls/Label'
 import MasterPage from 'app/components/MasterPage'
-import ISearchResultItem from 'app/interfaces/ISearchResultItem'
+import useApi from 'app/hooks/useApi'
+import IError from 'app/interfaces/IError'
+import IChampionList from 'app/interfaces/IChampionList'
+import IChampionListFilter from 'app/interfaces/IChampionListFilter'
 import HomePageSearchFilter from './SearchFilter'
 import HomePageSearchResult from './SearchResult'
 import useStyles from './styles'
@@ -11,9 +14,17 @@ interface Props {
 
 const HomePage = (props: Props) => {
     const classes = useStyles()
+    const api = useApi()
+    const [championList, setChampionList] = useState<IChampionList | null>(null)
 
-    const searchResultItems: ISearchResultItem[] = [
-    ]
+    const handleSearch = (filter: IChampionListFilter) => {
+        api.getChampions(filter)
+            .then((championList: IChampionList) => {
+                setChampionList(championList)
+            })
+            .catch((error: IError) => {
+            })
+    }
 
     return (
         <MasterPage>
@@ -21,8 +32,14 @@ const HomePage = (props: Props) => {
                 <Label>Home Page</Label>
                 <br/>
 
-                <HomePageSearchFilter />
-                <HomePageSearchResult items={searchResultItems} />
+                <HomePageSearchFilter onSearch={handleSearch} />
+
+                {!championList &&
+                    <Label>No Search</Label>
+                }
+                {championList &&
+                    <HomePageSearchResult championList={championList} />
+                }
             </div>
         </MasterPage>
     )

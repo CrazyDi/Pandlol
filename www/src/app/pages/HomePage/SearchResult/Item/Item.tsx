@@ -1,10 +1,10 @@
 import React from 'react'
 import Label from 'controls/Label'
-import ISearchResultItem from 'app/interfaces/ISearchResultItem'
+import IChampion from 'app/interfaces/IChampion'
 import useStyles from './styles'
 
 interface Props {
-    item: ISearchResultItem
+    item: IChampion
 }
 
 const HomePageSearchResultItem = (props: Props) => {

@@ -27,7 +27,6 @@ const getBreakPointWidth = (breakPoint: BreakPoint): number => {
         default:
             return 0
     }
-
 }
 
 const getMedia = (minWidth: BreakPoint, maxWidth: number) => {
