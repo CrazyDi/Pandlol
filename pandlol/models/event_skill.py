@@ -12,22 +12,22 @@ class EventSkill(BaseModel):
     def __init__(self, request_params: Dict):
         super().__init__(table_name="event_skill", request_params=request_params)
 
-    def skill_list(self):
+    def skill_list(self) -> pd.DataFrame:
         """
         Список прокачки скиллов чемпиона
         :return: Результат
         """
         df = pd.DataFrame(list(self.table.find(self.params)))
-        df["rank"] = df.groupby(["match_id", "champion_name"])["timestamp"].rank("dense")
+        df["level"] = df.groupby(["match_id", "champion_name"])["timestamp"].rank("dense")
 
-        df = df[["_id", "champion_name", "skill_code", "rank"]]
+        df = df[["_id", "champion_name", "skill_code", "level"]]
 
-        df_group = df.groupby(["champion_name", "skill_code", "rank"]).count().reset_index().rename(
-            columns={"_id": "count_rank"})
-        df_sum = df.groupby(["champion_name", "rank"]).count().reset_index().rename(
-            columns={"_id": "sum_rank"}).drop(columns=["skill_code"])
+        df_group = df.groupby(["champion_name", "skill_code", "level"]).count().reset_index().rename(
+            columns={"_id": "count_level"})
+        df_sum = df.groupby(["champion_name", "level"]).count().reset_index().rename(
+            columns={"_id": "sum_level"}).drop(columns=["skill_code"])
 
-        df_all = df_group.merge(df_sum, on=["champion_name", "rank"])
-        df_all["percent_rank"] = round(df_all["count_rank"] / df_all["sum_rank"] * 100)
+        df_all = df_group.merge(df_sum, on=["champion_name", "level"])
+        df_all["percent_level"] = round(df_all["count_level"] / df_all["sum_level"] * 100)
 
-        return df_all[df_all["percent_rank"] > 0]
+        return df_all[df_all["percent_level"] > 0]

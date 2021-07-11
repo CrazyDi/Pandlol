@@ -1,6 +1,6 @@
 import pandas as pd
 
-from typing import List
+from typing import List, Dict
 
 from pandlol.utils.custom_exception import ErrorOrderParam, ErrorPageParam
 
@@ -35,3 +35,17 @@ def data_paginate(data: List, page: str):
         return data[((page_num - 1) * page_size):(page_num * page_size)]
     except Exception:
         raise ErrorPageParam
+
+
+def data_format(param_list: Dict, df: pd.DataFrame):
+    # сортировка
+    if param_list.get("order"):
+        df = data_order(df, sorted(param_list.get("order")))
+
+    df = df.to_dict("records")
+
+    # информация о странице
+    if param_list.get("page"):
+        df = data_paginate(df, param_list.get("page"))
+
+    return df

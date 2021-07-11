@@ -47,13 +47,9 @@ api.add_resource(UserProfile, '/api/profile')  # профиль пользова
 
 
 # Загрузка edpoint для списка чемпионов
-from pandlol.resources.champion_list import ChampionList
+from pandlol.resources.champion_list import ChampionList, ChampionEventSkill
 
 api.add_resource(ChampionList, '/api/champions')  # запрос на список чемпионов
-
-# Загрузка endppoint для прокачки скиллов чемпиона
-from pandlol.resources.event_skill import ChampionEventSkill
-
 api.add_resource(ChampionEventSkill, '/api/skills')
 
 # домашняя страница
