@@ -7,14 +7,14 @@ from pandlol.models.base_model import BaseModel
 
 class MatchList(BaseModel):
     """
-    Объект списка матчей
+    List of matches
     """
     def __init__(self, request_params: Dict):
         super().__init__(table_name="match_detail", request_params=request_params)
 
     def champion_list(self, request: str):
         """
-        Список чемпионов с указанным параметром
+        List of champions with parameters
         :param request: Pick, Ban, Win
         :return: pd.DataFrame
         """

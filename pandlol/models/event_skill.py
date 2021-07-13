@@ -7,15 +7,15 @@ from pandlol.models.base_model import BaseModel
 
 class EventSkill(BaseModel):
     """
-    Объект прокачки скиллов
+    Event skill object class
     """
     def __init__(self, request_params: Dict):
         super().__init__(table_name="event_skill", request_params=request_params)
 
     def skill_list(self) -> pd.DataFrame:
         """
-        Список прокачки скиллов чемпиона
-        :return: Результат
+        List of order skill update
+        :return: Data frame
         """
         df = pd.DataFrame(list(self.table.find(self.params)))
         df["level"] = df.groupby(["match_id", "champion_name"])["timestamp"].rank("dense")

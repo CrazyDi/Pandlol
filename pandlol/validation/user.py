@@ -7,7 +7,7 @@ from pandlol.models.user import UserModel
 
 class CheckUser:
     """
-    Проверка данных пользоавтеля
+    Check user data
     """
     def __init__(self, email, password, confirm_password=""):
         self.email = email
@@ -15,9 +15,6 @@ class CheckUser:
         self.confirm_password = confirm_password
 
     def validate_email_format(self) -> Dict:
-        """
-        Проверка формата введенного email
-        """
         if len(self.email) == 0:
             return {"code": 100,
                     "message": "email is empty"}
@@ -30,18 +27,12 @@ class CheckUser:
         return {}
 
     def validate_email_exists(self) -> Dict:
-        """
-        Проверка существования такого пользователя в БД
-        """
         if UserModel.objects(email=self.email).first():
             return {"code": 102,
                     "message": "email exists"}
         return {}
 
     def validate_password_format(self) -> Dict:
-        """
-        Проверка формата введенного пароля
-        """
         if len(self.password) == 0:
             return {"code": 103,
                     "message": "password is empty"}
@@ -53,9 +44,6 @@ class CheckUser:
         return {}
 
     def validate_confirm_password(self) -> Dict:
-        """
-        Проверка подтверждения пароля
-        """
         if not self.confirm_password:
             return {"code": 107,
                     "message": "confirm password is empty"}
@@ -67,9 +55,6 @@ class CheckUser:
         return {}
 
     def validate_password(self) -> Dict:
-        """
-        Проверка пароля пользователя
-        """
         if len(self.password) == 0:
             return {"code": 103,
                     "message": "password is empty"}
@@ -84,9 +69,6 @@ class CheckUser:
         return {}
 
     def validate_email_not_exists(self) -> Dict:
-        """
-        Проверка существования такого пользователя в БД
-        """
         if not UserModel.objects(email=self.email).first():
             return {"code": 108,
                     "message": "email doesn't exist"}

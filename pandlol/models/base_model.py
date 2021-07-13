@@ -8,7 +8,7 @@ from pandlol import mongo_db
 
 class BaseModel:
     """
-    Базовая модель запроса данных
+    Base model access to data
     """
     table: Collection = None
 
@@ -18,13 +18,13 @@ class BaseModel:
 
     def count(self):
         """
-        Количество записей в таблице
+        Count of records in the table
         """
         return self.table.find(self.params).count()
 
     def data(self) -> pd.DataFrame:
         """
-        Данные по параметрам
-        :return: Данные
+        Data with parameters
+        :return: Data Frame
         """
         return pd.DataFrame(list(self.table.find(self.params)))

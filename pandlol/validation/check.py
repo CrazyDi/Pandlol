@@ -1,15 +1,15 @@
 class Check:
     """
-    Класс для общей валидации
+    Common validation
     """
     def __init__(self):
         self.errors = {}
 
     def validate(self, **kwargs) -> bool:
         """
-        Функция собирает все ошибки возникшие при валидации указанных параметров и возвращает их в объекте JSON
-        :param kwargs: параметр проверки=[список функций валидации]
-        :return:
+        Function gets all errors from items and returns them as JSON
+        :param kwargs: check parameters=[list of validation function]
+        :return: JSON of errors
         """
         self.errors = {}
         for key, func_list in kwargs.items():
