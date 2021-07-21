@@ -8,7 +8,7 @@ from pandlol.models.user import UserModel
 from pandlol.validation.check import Check
 from pandlol.validation.user import CheckUser
 
-# Парсер данных пользователя
+
 user_parser = reqparse.RequestParser()
 user_parser.add_argument("email", default="", type=str)
 user_parser.add_argument("password", default="", type=str)
@@ -18,13 +18,13 @@ user_parser.add_argument("avatar", type=str)
 
 class UserRegister(Resource):
     """
-    Регистрация пользователя
+    User registration
     """
     def post(self):
-        # собираем данные параметров
+        # parameters
         data = user_parser.parse_args()
 
-        # валидация
+        # validation
         check_user = CheckUser(data["email"], data["password"], data["confirm_password"])
         check = Check()
 
@@ -34,14 +34,14 @@ class UserRegister(Resource):
                 confirm_password=[check_user.validate_confirm_password]):
             return {"status": "ERROR", "errors": check.errors}
 
-        # если прошли валидацию - создаем объект пользователя
+        # if validation is true - create object of user
         user = UserModel(
             email=data["email"],
             password=data["password"],
             avatar=data["avatar"]
         )
 
-        # добавляем пользователя в базу
+        # add user to data
         user.save()
         res_code = 200
 
@@ -50,25 +50,25 @@ class UserRegister(Resource):
 
 class UserLogin(Resource):
     """
-    Вход пользователя
+    Login
     """
     def post(self):
-        # собираем данные из параметров
+        # parameters
         data = user_parser.parse_args()
 
-        # валидация
+        # validation
         check_user = CheckUser(data["email"], data["password"], data["confirm_password"])
         check = Check()
 
-        # проверяем, есть ли такой пользователей
+        # check exist
         if not check.validate(email=[check_user.validate_email_format, check_user.validate_email_not_exists]):
             return {"status": "ERROR", "errors": check.errors}
 
-        # если пользователь есть, проверяем пароль
+        # check password
         if not check.validate(password=[check_user.validate_password]):
             return {"status": "ERROR", "errors": check.errors}
 
-        # если прошла валидация, создаем токены
+        # create tokens
         access_token = create_access_token(identity=data["email"])
         refresh_token = create_refresh_token(identity=data["email"])
 
@@ -79,7 +79,7 @@ class UserLogin(Resource):
 
 class TokenRefresh(Resource):
     """
-    Обновление access token для пользоателя. Требует refresh token
+    Refresh access token for user. Requires refresh token
     """
     @jwt_required(refresh=True)
     def post(self):
@@ -97,8 +97,8 @@ class TokenRefresh(Resource):
 
 class UserProfile(Resource):
     """
-    Просмотр данных о пользователе. Пока что возвращает только имя пользователя.
-    Требует access token
+    View data of user. Now return only username
+    Requires access token
     """
     @jwt_required
     def get(self):
@@ -114,7 +114,7 @@ class UserProfile(Resource):
 
 class UserLogout(Resource):
     """
-    Выход пользователя. Требует access token
+    User logout. Requires access token
     """
     @jwt_required()
     def post(self):

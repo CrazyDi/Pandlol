@@ -8,7 +8,7 @@ from pandlol.models.user import UserModel
 
 class TestUserRegistrationCase(BaseCase):
     """
-    Тестирование /signup
+    /signup
     """
     def setUp(self):
         super().setUp()
@@ -21,9 +21,6 @@ class TestUserRegistrationCase(BaseCase):
         }
 
     def testUser_Register_Successful(self):
-        """
-        Тест успешной регистрации
-        """
         response = self.client.post(
             f"{URL_SERVER}/api/signup",
             headers={"Content-Type": "application/json"},
@@ -34,9 +31,6 @@ class TestUserRegistrationCase(BaseCase):
         self.assertEqual(json_data["status"], "OK")
 
     def testUser_Register_EmailEmpty(self):
-        """
-        Тест регистрации с пустым полем email
-        """
         self.payload["email"] = ""
         response = self.client.post(
             f"{URL_SERVER}/api/signup",
@@ -49,9 +43,6 @@ class TestUserRegistrationCase(BaseCase):
         self.assertEqual(json_data["errors"]["email"]["code"], 100)
 
     def testUser_Register_EmailWrongFormat(self):
-        """
-        Тест регистрации с неверным форматом email
-        """
         self.payload["email"] = "kate"
         response = self.client.post(
             f"{URL_SERVER}/api/signup",
@@ -64,9 +55,6 @@ class TestUserRegistrationCase(BaseCase):
         self.assertEqual(json_data["errors"]["email"]["code"], 101)
 
     def testUser_Register_EmailExists(self):
-        """
-        Тест регистрации существующим логином
-        """
         user = UserModel(
             email=self.payload["email"],
             password=self.payload["password"]
@@ -84,9 +72,6 @@ class TestUserRegistrationCase(BaseCase):
         self.assertEqual(json_data["errors"]["email"]["code"], 102)
 
     def testUser_Register_PasswordEmpty(self):
-        """
-        Тест регистрации с пустым полем пароля
-        """
         self.payload["password"] = ""
         response = self.client.post(
             f"{URL_SERVER}/api/signup",
@@ -99,9 +84,6 @@ class TestUserRegistrationCase(BaseCase):
         self.assertEqual(json_data["errors"]["password"]["code"], 103)
 
     def testUser_Register_PasswordNotEqualConfirm(self):
-        """
-        Тест регистрации, когда не совпадает поле пароля и подтверждение пароля
-        """
         self.payload["confirm_password"] = "222222"
         response = self.client.post(
             f"{URL_SERVER}/api/signup",
@@ -114,9 +96,6 @@ class TestUserRegistrationCase(BaseCase):
         self.assertEqual(json_data["errors"]["confirm_password"]["code"], 104)
 
     def testUser_Register_PasswordShort(self):
-        """
-        Тест регистрации со слишком коротким паролем
-        """
         self.payload["password"] = "1"
         self.payload["confirm_password"] = "1"
         response = self.client.post(
@@ -130,9 +109,6 @@ class TestUserRegistrationCase(BaseCase):
         self.assertEqual(json_data["errors"]["password"]["code"], 106)
 
     def testUser_Register_ConfirmPasswordEmpty(self):
-        """
-        Тест регистрации с пустым полем подтверждения пароля
-        """
         self.payload["confirm_password"] = ""
         response = self.client.post(
             f"{URL_SERVER}/api/signup",
@@ -147,7 +123,7 @@ class TestUserRegistrationCase(BaseCase):
 
 class TestUserLoginCase(BaseCase):
     """
-    Тестирование /login
+    /login
     """
     def setUp(self):
         super().setUp()
@@ -163,9 +139,7 @@ class TestUserLoginCase(BaseCase):
         user.save()
 
     def testUser_Login_Successful(self):
-        """
-        Тест успешного логина
-        """
+
         response = self.client.post(f"{URL_SERVER}/api/login",
                                     headers={"Content-Type": "application/json"},
                                     data=json.dumps(self.payload))
@@ -176,9 +150,6 @@ class TestUserLoginCase(BaseCase):
         self.assertIn("refresh_token", json_data["user"].keys())
 
     def testUser_Login_EmailEmpty(self):
-        """
-        Тест логина с пустым email
-        """
         self.payload["email"] = ""
         response = self.client.post(f"{URL_SERVER}/api/login",
                                     headers={"Content-Type": "application/json"},
@@ -189,9 +160,6 @@ class TestUserLoginCase(BaseCase):
         self.assertEqual(json_data["errors"]["email"]["code"], 100)
 
     def testUser_Login_EmailWrongFormat(self):
-        """
-        Тест логина с неверным форматом email
-        """
         self.payload["email"] = "1"
         response = self.client.post(f"{URL_SERVER}/api/login",
                                     headers={"Content-Type": "application/json"},
@@ -202,9 +170,6 @@ class TestUserLoginCase(BaseCase):
         self.assertEqual(json_data["errors"]["email"]["code"], 101)
 
     def testUser_Login_EmailNotExists(self):
-        """
-        Тест логина для несуществующего пользователя
-        """
         self.payload["email"] = "test2@test.com"
         response = self.client.post(f"{URL_SERVER}/api/login",
                                     headers={"Content-Type": "application/json"},
@@ -215,9 +180,6 @@ class TestUserLoginCase(BaseCase):
         self.assertEqual(json_data["errors"]["email"]["code"], 108)
 
     def testUser_Login_PasswordEmpty(self):
-        """
-        Тест логина с пустым паролем
-        """
         self.payload["password"] = ""
         response = self.client.post(f"{URL_SERVER}/api/login",
                                     headers={"Content-Type": "application/json"},
@@ -228,9 +190,6 @@ class TestUserLoginCase(BaseCase):
         self.assertEqual(json_data["errors"]["password"]["code"], 103)
 
     def testUser_Login_PasswordWrong(self):
-        """
-        Тест логина с неверным паролем
-        """
         self.payload["password"] = "222222"
         response = self.client.post(f"{URL_SERVER}/api/login",
                                     headers={"Content-Type": "application/json"},
@@ -243,7 +202,7 @@ class TestUserLoginCase(BaseCase):
 
 class TestUserRefreshTokenCase(BaseCase):
     """
-    Тестирование /refresh
+    /refresh
     """
     def setUp(self):
         super().setUp()
@@ -267,9 +226,6 @@ class TestUserRefreshTokenCase(BaseCase):
         self.refresh_token = json_data["user"]["refresh_token"]
 
     def testUser_Refresh_Successful(self):
-        """
-        Тест успешного обновления access_token
-        """
         authorization = 'Bearer ' + self.refresh_token
         response = self.client.post(f"{URL_SERVER}/api/refresh",
                                     headers={"Authorization": authorization},
@@ -280,9 +236,6 @@ class TestUserRefreshTokenCase(BaseCase):
         self.assertIn("access_token", json_data["user"].keys())
 
     def testUser_Refresh_TokenWrong(self):
-        """
-        Тест обновления с неверным токеном
-        """
         authorization = 'Bearer ' + self.refresh_token + "111"
         response = self.client.post(f"{URL_SERVER}/api/refresh",
                                     headers={"Authorization": authorization},
@@ -292,7 +245,7 @@ class TestUserRefreshTokenCase(BaseCase):
 
 class TestUserLogoutCase(BaseCase):
     """
-    Тестирование /logout
+    /logout
     """
     def setUp(self):
         super().setUp()
@@ -315,9 +268,6 @@ class TestUserLogoutCase(BaseCase):
         self.access_token = json_data["user"]["access_token"]
 
     def testUser_Logout_Successful(self):
-        """
-        Тест успешного выхода пользователя
-        """
         authorization = 'Bearer ' + self.access_token
         response = self.client.post(f"{URL_SERVER}/api/logout",
                                     headers={"Authorization": authorization},
@@ -327,9 +277,6 @@ class TestUserLogoutCase(BaseCase):
         self.assertEqual(json_data["status"], "OK")
 
     def testUser_Logout_TokenWrong(self):
-        """
-        Тест выхода пользователя с неверным токеном
-        """
         authorization = 'Bearer ' + self.access_token + "111"
         response = self.client.post(f"{URL_SERVER}/api/logout",
                                     headers={"Authorization": authorization},
@@ -337,9 +284,6 @@ class TestUserLogoutCase(BaseCase):
         self.assertEqual(response.status_code, 422)
 
     def testUser_Logout_TokenRevoked(self):
-        """
-        Тест выхода пользователя с токеном уже вышедшего пользователя
-        """
         authorization = 'Bearer ' + self.access_token
         response = self.client.post(f"{URL_SERVER}/api/logout",
                                     headers={"Authorization": authorization},
