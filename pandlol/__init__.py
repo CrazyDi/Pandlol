@@ -1,9 +1,10 @@
 from dotenv import load_dotenv
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from flask_jwt_extended import JWTManager
 from flask_pymongo import PyMongo
 from flask_mongoengine import MongoEngine
 from flask_restful import Api
+from flask_swagger import swagger
 
 
 # Application with settings
@@ -51,7 +52,13 @@ from pandlol.resources.champion_list import ChampionList, ChampionEventSkill
 api.add_resource(ChampionList, '/api/champions')
 api.add_resource(ChampionEventSkill, '/api/skills')
 
+
 # homepage
 @app.route('/')
 def home():
     return render_template('index.html')
+
+
+@app.route("/spec")
+def spec():
+    return jsonify(swagger(app))
